@@ -40,3 +40,8 @@ Moving this prototype to production would require:
 2. Better document parsing capabilities including OCR.
 3. Expanded confidence scoring and LLM integrations purely as grounded rewrite/extraction assistants.
 4. Robust security, encryption, and audit logs.
+
+## Addressing CTO Skepticism
+A skeptical CTO reading this report will correctly point out that the "Confidence Audit" and these "stress tests" are largely deterministic theater. The confidence logic (`confidence_engine.py`) is just a set of hardcoded heuristic thresholds (e.g., "if >1 unknown document, overall confidence = weak"), not a true measure of probabilistic uncertainty or LLM hallucination risk. Furthermore, the stress tests themselves border on tautological—they merely assert that our hardcoded routing logic correctly routes a mocked input to a hardcoded output state. 
+
+We acknowledge this. The purpose of this layer in V1.4 is **not** to build a statistically rigorous uncertainty model, but to prove to operators that the *application architecture* has a designated, safe conceptual bucket for "I don't know" and "This looks messy." In a real production system, these heuristic buckets would be replaced by actual probabilistic confidence intervals from a genuine classification model, but the operator-facing UX and fail-safe routing principles established here would remain exactly the same.

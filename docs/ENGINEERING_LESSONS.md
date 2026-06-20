@@ -23,3 +23,6 @@ To use this system in production, several architectural changes would be needed:
 3. **Confidence scoring depth:** Expanding the engine to cross-validate claims across different documents.
 4. **Reviewer workflows:** Richer UI states for operators to approve, merge, or reject extracted data.
 5. **Security & audit logging:** Strict RLS (Row Level Security), audit trails for operator changes, and SOC2-compliant data handling.
+
+## The "Deterministic Theater" Concession
+A skeptical engineering leader might push back on our "Trust & Confidence" layer, noting that our confidence scores are just hardcoded rules (e.g. `unknown_evidence_count > 0 == weak confidence`) rather than true model uncertainty. They would be right. We are using deterministic rules to *mock* the shape of probabilistic uncertainty. We do this to validate the UX and operator workflows (forcing humans to review edge cases) without the overhead of deploying an actual LLM pipeline for classification. The lesson here is that building the *rails* for uncertainty (the UI, the "needs_review" database flags, the safe fallback states) is more critical for early product validation than the mathematical purity of the confidence score itself.
