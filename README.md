@@ -1,7 +1,5 @@
 # Diligence Readiness Layer
 
-![Diligence Readiness Layer Dashboard](docs/screenshots/dashboard.png)
-
 Diligence Readiness Layer is an operator-reviewed evidence intelligence module for fundraising preparation.
 
 > **Disclaimer:** This is an independent feature prototype, not a standalone company/product and not affiliated with or endorsed by any company. It explores how an embedded operator team could turn founder-provided evidence into draft diligence-preparation artifacts for human review. It does not provide legal, tax, accounting, investment, or fundraising advice.
@@ -58,19 +56,11 @@ Run the app locally, open `http://localhost:3000/demo`, and select Seed & analyz
 
 ### Strict score and recovery path
 
-![AtlasAI dashboard showing the strict score and recovery path](docs/screenshots/dashboard.png)
-
 ### Investor-facing risk context
-
-![Risk flags with investor relevance and suggested fixes](docs/screenshots/risks.png)
 
 ### Source-backed diligence Q&A
 
-![Investor questions with answer drafts, sources, and missing evidence](docs/screenshots/investor-qa.png)
-
 ### Confidence Audit
-
-![Confidence audit showing uncertainty and operator review queue](docs/screenshots/confidence-audit.png)
 
 ## Architecture
 
