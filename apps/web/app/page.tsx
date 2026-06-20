@@ -10,7 +10,7 @@ const features = [
 export default function Landing() {
   return <main className="min-h-screen overflow-hidden">
     <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-      <div className="flex items-center gap-3 font-semibold"><span className="grid h-9 w-9 place-items-center rounded-xl bg-mint text-slate-950"><Sparkles size={18}/></span>Diligence <span className="hidden text-slate-500 sm:inline">/ Readiness Layer</span></div>
+      <div className="flex items-center gap-3 font-semibold"><span className="grid h-9 w-9 place-items-center rounded-xl bg-mint text-slate-950"><Sparkles size={18}/></span>Flowlie <span className="hidden text-slate-500 sm:inline">/ Raise Readiness Copilot</span></div>
       <Link href="/demo" className="button-secondary">Launch demo <ArrowRight size={15}/></Link>
     </nav>
     <section className="mx-auto max-w-7xl px-6 pb-20 pt-20 md:pt-28">
@@ -30,7 +30,7 @@ export default function Landing() {
       </div>
     </section>
     <footer className="mx-auto max-w-7xl px-6 pb-8 text-sm text-slate-500">
-      This is an independent feature prototype, not a standalone company/product and not affiliated with or endorsed by any company. It explores how an embedded operator team could turn founder-provided evidence into draft diligence-preparation artifacts for human review. It does not provide legal, tax, accounting, investment, or fundraising advice.
+      Flowlie Raise Readiness Copilot turns founder-provided evidence into draft diligence-preparation artifacts for operator review. All demo data is synthetic and every generated output is a draft requiring operator review. It does not provide legal, tax, accounting, investment, or fundraising advice.
     </footer>
   </main>;
 }

@@ -10,7 +10,7 @@
 
 ## What this does not do
 
-* It is not a standalone product or founder self-serve platform.
+* It is not a founder self-serve platform; an operator reviews every draft.
 * It does not provide autonomous legal/compliance review.
 * It does not deeply understand arbitrary legal/financial documents.
 * It does not replace operator judgment.

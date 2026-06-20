@@ -5,7 +5,7 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 
 API_ROOT = Path(__file__).resolve().parents[1]
-DATABASE_PATH = API_ROOT / "f.db"
+DATABASE_PATH = API_ROOT / "flowlie.db"
 DATABASE_URL = f"sqlite:///{DATABASE_PATH.as_posix()}"
 
 

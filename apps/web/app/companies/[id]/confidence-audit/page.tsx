@@ -76,6 +76,9 @@ export default async function ConfidenceAuditPage({ params }: { params: Promise<
                   <div className="flex items-center gap-6 text-[13px] text-[#666] font-medium border-t border-borderDark pt-4 mt-1">
                     <div className="flex items-center gap-2">
                       Coverage: <span className="font-semibold text-[#dedede]">{Math.round(comp.evidence_coverage * 100)}%</span>
+                      <span className="text-[11px] font-medium text-[#888] bg-[#1a1a1a] border border-borderDark px-2 py-1 rounded-md">
+                        · heuristic estimate
+                      </span>
                     </div>
                     <div>Structured Records: <span className="font-semibold text-[#dedede]">{comp.structured_records_count}</span></div>
                     {comp.unknown_evidence_count > 0 && (

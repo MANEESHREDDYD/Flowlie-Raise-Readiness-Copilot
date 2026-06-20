@@ -1,14 +1,14 @@
-# Diligence Readiness Layer
+# Flowlie Raise Readiness Copilot
 
-Diligence Readiness Layer is an operator-reviewed evidence intelligence module for fundraising preparation.
+Flowlie Raise Readiness Copilot is an operator-reviewed evidence intelligence layer for fundraising preparation.
 
-> **Disclaimer:** This is an independent feature prototype, not a standalone company/product and not affiliated with or endorsed by any company. It explores how an embedded operator team could turn founder-provided evidence into draft diligence-preparation artifacts for human review. It does not provide legal, tax, accounting, investment, or fundraising advice.
+> **Disclaimer:** This is a prototype. Every generated output is a draft requiring operator review, and all demo data is synthetic. It does not provide legal, tax, accounting, investment, or fundraising advice.
 
 ## Why this exists
 
 Fundraising preparation is usually fragmented across spreadsheets, folders, legal checklists, and founder memory. This intelligence layer creates a single preparation workflow: it identifies the gaps likely to create investor follow-ups, shows the evidence behind every claim, and converts those gaps into a draft cleanup queue for human review.
 
-## Why this is a feature layer, not a standalone product
+## Operator-reviewed, not autonomous
 
 Founders should not rely on the system alone. Generated outputs are drafts, and operators must review and promote them. The system supports an embedded team by reducing evidence fragmentation. The value is trust, source traceability, and a clear cleanup workflow, not automatic judgment.
 
@@ -18,7 +18,7 @@ This is a prototype showing how founder-provided evidence can be transformed int
 
 ## What this does not do
 
-* It is not a standalone product or founder self-serve platform.
+* It is not a founder self-serve platform; an operator reviews every draft.
 * It does not provide autonomous legal/compliance review.
 * It does not deeply understand arbitrary legal/financial documents.
 * It does not replace operator judgment.
@@ -28,7 +28,7 @@ This is a prototype showing how founder-provided evidence can be transformed int
 
 ## What it does not claim
 
-This tool is not claiming to replicate any company’s product or internal tooling. It does not provide legal, tax, investment, accounting, or financial advice. It is not an autonomous compliance engine; all generated outputs are explicitly drafts requiring operator review.
+It does not provide legal, tax, investment, accounting, or financial advice. It is not an autonomous compliance engine; all generated outputs are explicitly drafts requiring operator review.
 
 ## Demo companies
 
