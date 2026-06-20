@@ -36,6 +36,7 @@ class Document(Base):
     category: Mapped[str] = mapped_column(String(80))
     status: Mapped[str] = mapped_column(String(40), default="present")
     review_status: Mapped[str] = mapped_column(String(20), default="needs_review")
+    evidence_quality: Mapped[str] = mapped_column(String(20), default="strong")
     extracted_text: Mapped[str] = mapped_column(Text, default="")
     uploaded_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
@@ -126,6 +127,11 @@ class RiskFlag(Base):
     suggested_fix: Mapped[str] = mapped_column(Text)
     status: Mapped[str] = mapped_column(String(20), default="open")
     review_status: Mapped[str] = mapped_column(String(20), default="needs_review")
+    evidence_quality: Mapped[str] = mapped_column(String(20), default="strong")
+    operator_note: Mapped[str] = mapped_column(Text, default="")
+    founder_facing_note: Mapped[str] = mapped_column(Text, default="")
+    reviewed_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
@@ -154,3 +160,8 @@ class ActionItem(Base):
     status: Mapped[str] = mapped_column(String(20), default="open")
     estimated_score_lift: Mapped[float] = mapped_column(Float, default=0)
     review_status: Mapped[str] = mapped_column(String(20), default="needs_review")
+    evidence_quality: Mapped[str] = mapped_column(String(20), default="strong")
+    operator_note: Mapped[str] = mapped_column(Text, default="")
+    founder_facing_note: Mapped[str] = mapped_column(Text, default="")
+    reviewed_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

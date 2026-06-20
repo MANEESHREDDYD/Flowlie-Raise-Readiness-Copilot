@@ -45,6 +45,19 @@ def ensure_v11_columns() -> None:
         ("investor_questions", "review_status", "ALTER TABLE investor_questions ADD COLUMN review_status VARCHAR(20) NOT NULL DEFAULT 'needs_review'"),
         ("action_items", "review_status", "ALTER TABLE action_items ADD COLUMN review_status VARCHAR(20) NOT NULL DEFAULT 'needs_review'"),
         ("readiness_scores", "review_status", "ALTER TABLE readiness_scores ADD COLUMN review_status VARCHAR(20) NOT NULL DEFAULT 'needs_review'"),
+        ("documents", "review_status", "ALTER TABLE documents ADD COLUMN review_status VARCHAR(20) NOT NULL DEFAULT 'needs_review'"),
+        ("documents", "evidence_quality", "ALTER TABLE documents ADD COLUMN evidence_quality VARCHAR(20) NOT NULL DEFAULT 'strong'"),
+        ("risk_flags", "evidence_quality", "ALTER TABLE risk_flags ADD COLUMN evidence_quality VARCHAR(20) NOT NULL DEFAULT 'strong'"),
+        ("risk_flags", "operator_note", "ALTER TABLE risk_flags ADD COLUMN operator_note TEXT NOT NULL DEFAULT ''"),
+        ("risk_flags", "founder_facing_note", "ALTER TABLE risk_flags ADD COLUMN founder_facing_note TEXT NOT NULL DEFAULT ''"),
+        ("risk_flags", "reviewed_by", "ALTER TABLE risk_flags ADD COLUMN reviewed_by VARCHAR(120)"),
+        ("risk_flags", "reviewed_at", "ALTER TABLE risk_flags ADD COLUMN reviewed_at DATETIME"),
+        ("action_items", "evidence_quality", "ALTER TABLE action_items ADD COLUMN evidence_quality VARCHAR(20) NOT NULL DEFAULT 'strong'"),
+        ("action_items", "operator_note", "ALTER TABLE action_items ADD COLUMN operator_note TEXT NOT NULL DEFAULT ''"),
+        ("action_items", "founder_facing_note", "ALTER TABLE action_items ADD COLUMN founder_facing_note TEXT NOT NULL DEFAULT ''"),
+        ("action_items", "reviewed_by", "ALTER TABLE action_items ADD COLUMN reviewed_by VARCHAR(120)"),
+        ("action_items", "reviewed_at", "ALTER TABLE action_items ADD COLUMN reviewed_at DATETIME"),
+        ("investor_questions", "evidence_quality", "ALTER TABLE investor_questions ADD COLUMN evidence_quality VARCHAR(20) NOT NULL DEFAULT 'strong'"),
     ]
     table_names = set(inspector.get_table_names())
     with engine.begin() as connection:

@@ -33,7 +33,12 @@ def update_risk(risk_id: int, payload: schemas.RiskUpdate, db: Session = Depends
     if not risk:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Risk not found")
-    risk.status = payload.status
+    if payload.status is not None:
+        risk.status = payload.status
+    if payload.operator_note is not None:
+        risk.operator_note = payload.operator_note
+    if payload.evidence_quality is not None:
+        risk.evidence_quality = payload.evidence_quality
     db.commit()
     db.refresh(risk)
     return risk

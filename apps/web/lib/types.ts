@@ -12,6 +12,7 @@ export type Readiness = {
 export type Risk = {
   id: number; category: string; severity: string; title: string; evidence: string;
   business_impact: string; why_matters_to_investors: string; suggested_fix: string; status: string; review_status?: ReviewStatus;
+  evidence_quality?: string; operator_note?: string; founder_facing_note?: string; reviewed_by?: string; reviewed_at?: string;
 };
 export type Financial = {
   month: string; revenue: number; expenses: number; cash_balance: number; burn: number; gross_margin: number;
@@ -21,8 +22,8 @@ export type FinancialSummary = {
   revenue_growth_percent: number; gross_margin_change: number; burn_increase_percent: number;
 };
 export type DataRoomItem = { key: string; name: string; category: string; status: string };
-export type ActionItem = { id: number; title: string; priority: string; owner: string; due_date: string; category: string; status: string; estimated_score_lift: number; review_status?: ReviewStatus };
-export type Question = { id: number; question: string; suggested_answer: string; source: string; missing_evidence: string; confidence: number; category: string; review_status?: ReviewStatus };
+export type ActionItem = { id: number; title: string; priority: string; owner: string; due_date: string; category: string; status: string; estimated_score_lift: number; review_status?: ReviewStatus; evidence_quality?: string; operator_note?: string; founder_facing_note?: string; reviewed_by?: string; reviewed_at?: string; };
+export type Question = { id: number; question: string; suggested_answer: string; source: string; missing_evidence: string; confidence: number; category: string; review_status?: ReviewStatus; evidence_quality?: string; };
 export type RecoveryAction = { action: string; estimated_score_lift: number; score_basis: string; source_evidence: string };
 export type RecoveryPath = {
   current_strict_score: number; current_tier: string; estimated_strict_score_lift: number;
@@ -38,4 +39,4 @@ export type CapEntry = { id: number; holder: string; type: string; ownership_per
 export type Headcount = { id: number; name: string; role: string; type: string; start_date: string; ip_assignment_signed: boolean; monthly_cost: number };
 export type Pipeline = { id: number; customer: string; stage: string; contract_value: number; probability: number; expected_close_month: string; revenue_concentration: number };
 export type Compliance = { id: number; item: string; status: string; last_updated: string | null; owner: string };
-export type DocumentRecord = { id: number; file_name: string; document_type: string; category: string; status: string; extracted_text: string };
+export type DocumentRecord = { id: number; file_name: string; document_type: string; category: string; status: string; extracted_text: string; evidence_quality?: string; review_status?: ReviewStatus; };

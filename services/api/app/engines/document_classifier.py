@@ -31,7 +31,7 @@ CATEGORIES = {
     "privacy_security": "Privacy & security",
     "investor_process": "Fundraising",
     "runway_warning": "Finance",
-    "unknown": "Other",
+    "unknown": "unclassified",
 }
 
 
@@ -45,6 +45,7 @@ def classify_document(text: str, file_name: str = "") -> dict:
             "confidence": 1.0,
             "matched_keywords": ["data room index"],
             "review_status": "reviewed",
+            "evidence_quality": "strong",
         }
     matches = {
         doc_type: [word for word in words if re.search(rf"\b{re.escape(word)}\b", haystack)]
@@ -61,8 +62,9 @@ def classify_document(text: str, file_name: str = "") -> dict:
 
     return {
         "document_type": best_type,
-        "category": CATEGORIES[best_type],
+        "category": CATEGORIES.get(best_type, "unclassified"),
         "confidence": confidence,
         "matched_keywords": best_matches if best_type != "unknown" else [],
         "review_status": "needs_review" if best_type == "unknown" else "draft",
+        "evidence_quality": "unknown" if best_type == "unknown" else "strong",
     }

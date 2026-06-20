@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "DiligenceOps Console",
-  description: "An evidence-to-diligence operator workbench for fundraising preparation.",
+  title: "Diligence Readiness Layer",
+  description: "Operator-reviewed evidence intelligence for fundraising preparation.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

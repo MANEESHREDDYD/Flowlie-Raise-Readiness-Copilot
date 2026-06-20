@@ -2,9 +2,9 @@
 
 ## Completed in V1.2
 
-- Operator console positioning: an internal evidence-intake workbench, not a self-serve replacement for an embedded team
+- Feature module positioning: an internal evidence-intake feature, not a self-serve tool
 - `review_status` (`draft | needs_review | reviewed`) on every generated output, defaulting to needs operator review
-- Operator portfolio with per-company review status and an operator review-promotion endpoint
+- Operator queue with per-company review status and an operator review-promotion endpoint
 - Five-company synthetic portfolio
 - Operator/founder-created companies with SQLite persistence
 - CRUD evidence-intake workspace

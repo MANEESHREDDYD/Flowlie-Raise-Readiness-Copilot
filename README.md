@@ -1,16 +1,30 @@
-# DiligenceOps Console
+# Diligence Readiness Layer
 
-DiligenceOps Console is a local-first operator workbench that turns synthetic startup evidence into draft diligence preparation artifacts for human review.
+Diligence Readiness Layer is an operator-reviewed evidence intelligence module for fundraising preparation.
 
-> **Disclaimer:** This is an independent portfolio prototype. It is not affiliated with, endorsed by, or built for any company. It uses synthetic data only and does not provide legal, tax, accounting, investment, or fundraising advice.
+> **Disclaimer:** This is an independent feature prototype, not a standalone company/product and not affiliated with or endorsed by any company. It explores how an embedded operator team could turn founder-provided evidence into draft diligence-preparation artifacts for human review. It does not provide legal, tax, accounting, investment, or fundraising advice.
 
 ## Why this exists
 
-Fundraising preparation is usually fragmented across spreadsheets, folders, legal checklists, and founder memory. This console creates a single preparation layer: it identifies the gaps likely to create investor follow-ups, shows the evidence behind every claim, and converts those gaps into a draft cleanup queue for human review.
+Fundraising preparation is usually fragmented across spreadsheets, folders, legal checklists, and founder memory. This intelligence layer creates a single preparation workflow: it identifies the gaps likely to create investor follow-ups, shows the evidence behind every claim, and converts those gaps into a draft cleanup queue for human review.
+
+## Why this is a feature layer, not a standalone product
+
+Founders should not rely on the system alone. Generated outputs are drafts, and operators must review and promote them. The system supports an embedded team by reducing evidence fragmentation. The value is trust, source traceability, and a clear cleanup workflow, not automatic judgment.
 
 ## What it demonstrates
 
 This is a prototype showing how founder-provided evidence can be transformed into auditable diligence preparation drafts. It demonstrates engineering judgment, strict rule-based scoring, and the transition of a generic demo into a persistent, multi-company evidence workspace. It uses deterministic keyword classification, explicit scoring rules, templated Q&A, and document-snippet retrieval to make the prototype testable and auditable without an LLM dependency.
+
+## What this does not do
+
+* It is not a standalone product or founder self-serve platform.
+* It does not provide autonomous legal/compliance review.
+* It does not deeply understand arbitrary legal/financial documents.
+* It does not replace operator judgment.
+* It does not make legal, tax, accounting, investment, or fundraising determinations.
+* It does not predict investor behavior or prove a company is ready to raise.
+* It does not handle production security, permissions, audit, encryption, or document versioning.
 
 ## What it does not claim
 

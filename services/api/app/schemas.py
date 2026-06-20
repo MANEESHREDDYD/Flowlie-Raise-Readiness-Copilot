@@ -151,7 +151,10 @@ class DocumentUpdate(BaseModel):
 
 
 class RiskUpdate(BaseModel):
-    status: Literal["open", "completed", "dismissed"]
+    status: Literal["open", "completed", "dismissed"] | None = None
+    operator_note: str | None = None
+    founder_facing_note: str | None = None
+    evidence_quality: str | None = None
 
 
 class ReviewStatusUpdate(BaseModel):
@@ -166,5 +169,6 @@ class DocumentOut(ORMModel):
     category: str
     status: str
     review_status: str
+    evidence_quality: str
     extracted_text: str
     uploaded_at: datetime
