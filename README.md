@@ -32,12 +32,11 @@ This tool is not claiming to replicate any company’s product or internal tooli
 
 ## Demo companies
 
-The application includes five synthetic startups: AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger.
-A `/companies` portfolio allows comparing scores, tiers, top risks, and open actions. The included synthetic company, **AtlasAI**, is a Seed-stage AI sales automation startup. The console analyzes its financials, data room, compliance checklist, cap table, headcount, customer pipeline, and investor meeting notes to produce diligence drafts. No paid APIs, external investor databases, or real company data are required.
+The application includes five synthetic startups: AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger. A `/companies` portfolio allows comparing scores, tiers, top risks, and open actions. The included synthetic company, AtlasAI, is a Seed-stage AI sales automation startup. The console analyzes its financials, data room, compliance checklist, cap table, headcount, customer pipeline, and investor meeting notes to produce diligence drafts. No paid APIs, external investor databases, or real company data are required.
 
 ## Human review workflow
 
-Every generated output — readiness score, risks, investor Q&A, action items, and the exported report — carries a `review_status` of `draft | needs_review | reviewed` and **defaults to `needs_review`**. An operator can promote a company's analysis to `reviewed` after verifying the drafts. If a document cannot be confidently classified, it is marked as `unknown` and requires human review, bypassing automated strong scoring.
+Every generated output — readiness score, risks, investor Q&A, action items, and the exported report — carries a `review_status` of `draft | needs_review | reviewed` and defaults to `needs_review`. An operator can promote a company's analysis to `reviewed` after verifying the drafts. If a document cannot be confidently classified, it is marked as `unknown` and requires human review, bypassing automated strong scoring.
 
 ## Limitations
 
@@ -53,7 +52,7 @@ For more context, see [LIMITATIONS.md](docs/LIMITATIONS.md) and [ENGINEERING_LES
 
 ## Product preview
 
-Run the app locally, open `http://localhost:3000/demo`, and select **Seed & analyze AtlasAI**. The dashboard will populate in one workflow.
+Run the app locally, open `http://localhost:3000/demo`, and select Seed & analyze AtlasAI. The dashboard will populate in one workflow.
 
 ### Strict score and recovery path
 
@@ -66,6 +65,10 @@ Run the app locally, open `http://localhost:3000/demo`, and select **Seed & anal
 ### Source-backed diligence Q&A
 
 ![Investor questions with answer drafts, sources, and missing evidence](docs/screenshots/investor-qa.png)
+
+### Confidence Audit
+
+![Confidence audit showing uncertainty and operator review queue](docs/screenshots/confidence-audit.png)
 
 ## Architecture
 
@@ -176,12 +179,6 @@ npm run build
 ## Demo data
 
 `demo-data/` contains the complete synthetic AtlasAI profile and evidence set. The files intentionally include realistic diligence gaps: 7.1 months of runway, margin compression, rising burn, unsigned contractor IP, incomplete compliance evidence, an unmodeled SAFE, customer concentration, and a missing detailed use-of-funds plan.
-
-## Product narrative
-
-- [Private outreach notes](docs/FLOWLIE_OUTREACH.md)
-- [Portfolio case study](docs/CASE_STUDY.md)
-- [Three-minute demo script](docs/DEMO_SCRIPT.md)
 
 ## Future roadmap
 

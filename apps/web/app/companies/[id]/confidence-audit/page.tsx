@@ -9,8 +9,9 @@ async function getConfidenceAudit(id: string) {
   return res.json();
 }
 
-export default async function ConfidenceAuditPage({ params }: { params: { id: string } }) {
-  const audit = await getConfidenceAudit(params.id);
+export default async function ConfidenceAuditPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const audit = await getConfidenceAudit(resolvedParams.id);
   if (!audit) return notFound();
 
   const colorMap = {
