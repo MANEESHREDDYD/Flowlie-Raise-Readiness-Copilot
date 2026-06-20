@@ -1,0 +1,2 @@
+Present: financials, cap table, headcount, customer pipeline, compliance checklist, privacy summary, investor notes.
+Needs review: complete security packages for new integrations.

@@ -23,3 +23,5 @@ body {
 table { @apply w-full text-left text-sm; }
 th { @apply border-b border-white/10 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500; }
 td { @apply border-b border-white/5 px-5 py-4 align-top text-slate-300; }
+.form-label { @apply flex flex-col gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500; }
+.form-input { @apply rounded-xl border border-white/10 bg-[#0d1524] px-3 py-2.5 text-sm font-normal normal-case tracking-normal text-white outline-none transition focus:border-mint/50; }

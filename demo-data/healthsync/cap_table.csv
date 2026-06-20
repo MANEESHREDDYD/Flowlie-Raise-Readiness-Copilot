@@ -1,0 +1,5 @@
+holder,type,ownership_percent,shares,notes
+Founder A,common,36,3600000,
+Founder B,common,26,2600000,
+Employee Option Pool,option_pool,12,1200000,
+Seed Investors,preferred,26,2600000,

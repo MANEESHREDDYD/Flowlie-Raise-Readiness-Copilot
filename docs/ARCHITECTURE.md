@@ -4,6 +4,14 @@
 
 Flowlie is a local monorepo with a Next.js frontend and a FastAPI service backed by SQLite.
 
+## V1.2: Multi-company and user-entered data
+
+The data model is company-scoped. Every financial, ownership, people, pipeline, compliance, document, score, risk, question, and action record carries a `company_id`. The portfolio endpoint aggregates the latest generated state without moving analysis logic into the frontend.
+
+User-created companies and records are written directly to SQLite through validated FastAPI CRUD routes. Uploaded files are extracted locally; pasted notes use the same keyword classifier. Analysis engines accept partial collections and return missing-input guidance instead of failing.
+
+The demo seeder reads five company directories. It runs the same risk, Q&A, readiness, and action engines used for user data. Requested portfolio benchmark scores for the four comparison companies are stored as documented demo snapshots after deterministic component calculation.
+
 ```mermaid
 flowchart TB
   subgraph Browser
@@ -22,8 +30,10 @@ flowchart TB
   end
   DB[(SQLite)]
   FILES[Demo files / uploaded files]
+  FORMS[Company data-entry forms]
 
   UI <--> API
+  FORMS --> API
   FILES --> ING --> CLASS --> DB
   API <--> DB
   DB --> READY

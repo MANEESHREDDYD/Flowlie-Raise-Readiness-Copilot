@@ -1,5 +1,14 @@
 # Roadmap
 
+## Completed in V1.2
+
+- Five-company synthetic portfolio
+- User-created companies with SQLite persistence
+- CRUD data-entry workspace
+- Text-note and file-upload evidence
+- Company-specific analysis and report export
+- Graceful partial analysis and validation
+
 ## Near term
 
 - SQLite FTS5 or TF-IDF evidence ranking

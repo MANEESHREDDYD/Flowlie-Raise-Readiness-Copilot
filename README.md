@@ -2,6 +2,20 @@
 
 A zero-budget, local-first full-stack prototype that turns startup back-office data into explainable fundraising diligence intelligence.
 
+## V1.2: Multi-company and user-entered data
+
+V1.2 expands the original AtlasAI demo into a persistent company workspace:
+
+- Five synthetic startups: AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger
+- A `/companies` portfolio comparing scores, tiers, top risks, and open actions
+- A guided `/companies/new` workflow for arbitrary startups
+- Dashboard forms for financials, cap table, headcount, pipeline, compliance, and documents
+- SQLite-backed create, edit, and delete operations
+- Company-specific dashboards, analysis runs, and Markdown reports
+- Graceful partial analysis when required evidence has not been added yet
+
+The four comparison-company scores use documented seed-time portfolio calibration targets from the product brief. Component scores, risks, Q&A, and action plans remain deterministic and are generated from each company’s own synthetic records.
+
 The included synthetic company, **AtlasAI**, is a Seed-stage AI sales automation startup. Flowlie analyzes its financials, data room, compliance checklist, cap table, headcount, customer pipeline, and investor meeting notes to produce:
 
 - A weighted **Strict Raise Readiness Score** and readiness tier
@@ -134,7 +148,10 @@ The `/demo` UI performs the same sequence with one button.
 | Area | Endpoints |
 | --- | --- |
 | Demo | `POST /demo/seed`, `POST /demo/reset`, `GET /demo/status` |
+| Multi-company demo | `POST /demo/seed-atlasai`, `POST /demo/seed-all` |
 | Company | `POST /companies`, `GET /companies`, `GET /companies/{id}`, `GET /companies/{id}/dashboard` |
+| Portfolio | `GET /companies/summary` |
+| User data | CRUD routes for financials, cap table, headcount, pipeline, compliance, and documents |
 | Recovery and export | `GET /companies/{id}/recovery-path`, `GET /companies/{id}/diligence-report.md` |
 | Documents | upload, list, analyze, and data-room checklist routes |
 | Financials | monthly series and summary routes |

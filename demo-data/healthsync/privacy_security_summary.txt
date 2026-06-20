@@ -1,0 +1,1 @@
+HealthSync documents HIPAA privacy practices, PHI access controls, and incident response. Security documentation is incomplete for two new clinical integrations and needs review.

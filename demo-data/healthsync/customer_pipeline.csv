@@ -1,0 +1,4 @@
+customer,stage,contract_value,probability,expected_close_month,revenue_concentration
+Metro Health,negotiation,500000,0.70,2026-08,0.32
+Care Alliance,pilot,300000,0.60,2026-07,0.22
+Valley Clinics,discovery,240000,0.40,2026-10,0.16

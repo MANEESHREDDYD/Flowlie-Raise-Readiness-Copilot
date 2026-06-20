@@ -1,31 +1,48 @@
 from ..utils.dates import due_date
 
 
-def generate_action_plan(risks) -> list[dict]:
-    templates = [
-        ("Upload signed contractor IP assignment agreements", "High", "CTO", 1, "Legal / HR", 7.9),
-        ("Prepare detailed use-of-funds breakdown for the $3M Seed round", "High", "CEO", 2, "Fundraising", 2.9),
-        ("Build a pro-forma cap table including $500K SAFE conversion", "High", "Finance", 3, "Cap Table", 3.0),
-        ("Upload 409A valuation confirmation or mark it as scheduled", "Medium", "Finance", 4, "Compliance", 5.9),
-        ("Confirm and upload BOI filing documentation", "Medium", "CEO", 4, "Compliance", 5.9),
-        ("Prepare an evidence-backed explanation for gross margin decline", "Medium", "Finance", 5, "Investor Q&A", 0.0),
-        ("Create a customer concentration mitigation memo", "High", "Sales", 6, "GTM", 0.0),
-        ("Add a department-level expense breakdown for the burn increase", "Medium", "Finance", 7, "Finance", 0.0),
-        ("Publish a raise timeline with weekly diligence owners", "High", "CEO", 1, "Fundraising", 0.0),
-    ]
-    def severity(risk):
-        return risk.get("severity", "") if isinstance(risk, dict) else getattr(risk, "severity", "")
+TASKS = {
+    "Runway below investor comfort threshold": ("Publish a raise timeline and use-of-funds plan", "CEO", "Fundraising", 0.0),
+    "Runway requires immediate intervention": ("Create a weekly cash contingency plan", "CEO", "Finance", 0.0),
+    "Gross margin has materially declined": ("Prepare a gross-margin recovery bridge", "Finance", "Investor Q&A", 0.0),
+    "Monthly burn is increasing quickly": ("Add a department-level expense bridge", "Finance", "Finance", 0.0),
+    "Financial history is insufficient": ("Add monthly financial records", "Finance", "Finance", 0.0),
+    "Contractor IP assignments are missing": ("Upload signed contractor IP assignment agreements", "CTO", "Legal / HR", 7.9),
+    "Headcount evidence is missing": ("Add employee and contractor records", "Operations", "People", 0.0),
+    "409A valuation is missing": ("Upload or schedule a current 409A valuation", "Finance", "Compliance", 5.9),
+    "BOI filing confirmation is missing": ("Confirm and upload BOI filing documentation", "CEO", "Compliance", 5.9),
+    "State foreign qualification needs review": ("Review state foreign qualification status", "Legal", "Compliance", 0.0),
+    "SAFE is not reflected in ownership": ("Build a pro-forma cap table including SAFE conversion", "Finance", "Cap Table", 3.0),
+    "Cap table data is missing": ("Add a fully diluted cap table", "Finance", "Cap Table", 0.0),
+    "Single-customer concentration is high": ("Create a customer concentration mitigation memo", "Sales", "GTM", 0.0),
+    "Top-two customer concentration is high": ("Add pipeline coverage and diversification milestones", "Sales", "GTM", 0.0),
+    "Customer pipeline evidence is missing": ("Add customer pipeline records", "Sales", "GTM", 0.0),
+    "Detailed use-of-funds is missing": ("Prepare a detailed use-of-funds breakdown", "CEO", "Fundraising", 2.9),
+    "SOC 2 evidence is incomplete": ("Upload SOC 2 readiness or assurance evidence", "CTO", "Security", 0.0),
+    "Healthcare security documentation is incomplete": ("Upload privacy and healthcare security documentation", "CTO", "Privacy & security", 0.0),
+    "Investor process materials need organization": ("Create an investor process tracker and materials checklist", "CEO", "Fundraising", 0.0),
+}
 
-    high_risk = any(severity(risk) in {"High", "Critical"} for risk in risks)
-    return [
-        {
-            "title": title,
-            "priority": priority if high_risk else "Medium",
+
+def generate_action_plan(risks) -> list[dict]:
+    tasks = []
+    seen = set()
+    for index, risk in enumerate(risks):
+        title = risk.get("title") if isinstance(risk, dict) else risk.title
+        severity = risk.get("severity") if isinstance(risk, dict) else risk.severity
+        if title in seen:
+            continue
+        seen.add(title)
+        task, owner, category, lift = TASKS.get(
+            title, (f"Resolve: {title}", "CEO", "Readiness", 0.0)
+        )
+        tasks.append({
+            "title": task,
+            "priority": "High" if severity in {"Critical", "High"} else "Medium",
             "owner": owner,
-            "due_date": due_date(day),
+            "due_date": due_date(min(7, index + 1)),
             "category": category,
             "status": "open",
-            "estimated_score_lift": estimated_score_lift,
-        }
-        for title, priority, owner, day, category, estimated_score_lift in templates
-    ]
+            "estimated_score_lift": lift,
+        })
+    return tasks

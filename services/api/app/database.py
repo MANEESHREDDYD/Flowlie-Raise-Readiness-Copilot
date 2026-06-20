@@ -32,6 +32,10 @@ def ensure_v11_columns() -> None:
     """Apply the two additive V1.1 columns to an existing local SQLite file."""
     inspector = inspect(engine)
     migrations = {
+        "companies": (
+            "is_demo",
+            "ALTER TABLE companies ADD COLUMN is_demo BOOLEAN NOT NULL DEFAULT 0",
+        ),
         "risk_flags": (
             "why_matters_to_investors",
             "ALTER TABLE risk_flags ADD COLUMN why_matters_to_investors TEXT NOT NULL DEFAULT ''",
@@ -48,3 +52,7 @@ def ensure_v11_columns() -> None:
             existing = {item["name"] for item in inspector.get_columns(table)}
             if column not in existing:
                 connection.execute(text(statement))
+        if "companies" in inspector.get_table_names():
+            existing = {item["name"] for item in inspector.get_columns("companies")}
+            if "portfolio_top_risk" not in existing:
+                connection.execute(text("ALTER TABLE companies ADD COLUMN portfolio_top_risk VARCHAR(160)"))

@@ -17,11 +17,12 @@ def run_readiness(company_id: int, db: Session = Depends(get_db)):
     questions_count = len(list(db.scalars(select(models.InvestorQuestion).where(models.InvestorQuestion.company_id == company_id)).all()))
     result = calculate_readiness(company, **data, generated_questions_count=questions_count)
     tier = result.pop("readiness_tier")
+    missing_inputs = result.pop("missing_inputs")
     score = models.ReadinessScore(company_id=company_id, **result)
     db.add(score)
     db.commit()
     db.refresh(score)
-    return {**score.__dict__, "readiness_tier": tier}
+    return {**score.__dict__, "readiness_tier": tier, "missing_inputs": missing_inputs}
 
 
 @router.get("/companies/{company_id}/readiness/latest")

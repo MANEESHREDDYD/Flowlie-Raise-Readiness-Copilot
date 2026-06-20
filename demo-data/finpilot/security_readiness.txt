@@ -1,0 +1,1 @@
+FinPilot has implemented access controls, encryption, incident response, and vendor review. SOC 2 is in progress; final independent assurance evidence is not yet available.

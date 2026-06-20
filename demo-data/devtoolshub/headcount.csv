@@ -1,0 +1,5 @@
+name,role,type,start_date,ip_assignment_signed,monthly_cost
+Leo,CEO,employee,2024-01-01,true,0
+Mei,CTO,employee,2024-01-01,true,0
+Arun,Developer Advocate,employee,2025-04-01,true,11000
+Tess,Technical Writer,contractor,2025-09-01,true,5000

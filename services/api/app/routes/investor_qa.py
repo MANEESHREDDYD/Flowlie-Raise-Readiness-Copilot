@@ -18,7 +18,7 @@ def generate(company_id: int, db: Session = Depends(get_db)):
     db.execute(delete(models.InvestorQuestion).where(models.InvestorQuestion.company_id == company_id))
     rows = [
         models.InvestorQuestion(company_id=company_id, **item)
-        for item in generate_questions(company, data["metrics"], data["cap_table"], data["headcount"], data["pipeline"], data["compliance"])
+        for item in generate_questions(company, data["metrics"], data["cap_table"], data["headcount"], data["pipeline"], data["compliance"], data["documents"])
     ]
     db.add_all(rows)
     db.commit()

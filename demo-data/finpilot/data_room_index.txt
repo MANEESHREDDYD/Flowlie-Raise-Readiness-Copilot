@@ -1,0 +1,2 @@
+Present: financials, cap table, headcount, pipeline, compliance checklist, security readiness, investor meeting notes, customer contracts, use of funds.
+Needs review: final SOC 2 assurance evidence.

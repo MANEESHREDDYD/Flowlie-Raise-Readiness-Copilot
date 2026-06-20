@@ -25,7 +25,7 @@ def build_diligence_report(
 ) -> str:
     summary = financial_summary(metrics)
     checklist = build_data_room(documents, compliance)
-    recovery = build_recovery_path(score.overall_score)
+    recovery = build_recovery_path(score.overall_score, actions)
     lines = [
         f"# {company.name} - Diligence Readiness Report",
         "",

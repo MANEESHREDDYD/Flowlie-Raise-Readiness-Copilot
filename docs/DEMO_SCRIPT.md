@@ -1,5 +1,18 @@
 # Three-minute demo script
 
+## V1.2 multi-company flow
+
+1. Open **Demo controls** and select **Seed all companies**.
+2. Open `/companies` and compare AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger.
+3. Open AtlasAI to show the strict 53.4 score and 78–84 recovery path.
+4. Return to the portfolio and select **Add company**.
+5. Create a startup manually, then open its data workspace.
+6. Add one financial row and one compliance item; optionally paste an investor note.
+7. Select **Run analysis** and show the partial, source-backed dashboard.
+8. Export the user-created company’s Markdown diligence report.
+
+The point of the V1.2 demo is that the product is no longer a fixed AtlasAI story: the same local workflow persists and analyzes arbitrary company data.
+
 ## 0:00–0:25 — Introduce the problem
 
 “Fundraise readiness is usually scattered across a data room, finance spreadsheet, cap table, HR records, and the founder’s memory of investor meetings. Flowlie turns that fragmented back office into one diligence preparation workflow.”

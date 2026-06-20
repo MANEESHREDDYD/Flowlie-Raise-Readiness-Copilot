@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { BarChart3, BookOpenCheck, Bot, Building2, CircleDollarSign, ClipboardCheck, FileStack, Gauge, LayoutDashboard, ShieldAlert, Users } from "lucide-react";
 
 const links = [
+  ["/companies", "Company portfolio", Building2],
   ["/dashboard", "Dashboard", LayoutDashboard],
   ["/data-room", "Data room", FileStack],
   ["/financials", "Financials", BarChart3],

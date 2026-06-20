@@ -1,0 +1,5 @@
+name,role,type,start_date,ip_assignment_signed,monthly_cost
+Priya,CEO,employee,2024-04-01,true,0
+Jon,CTO,employee,2024-04-01,true,0
+Ana,Compliance Lead,employee,2025-02-01,true,14000
+Sam,Security Advisor,contractor,2025-08-01,true,7000

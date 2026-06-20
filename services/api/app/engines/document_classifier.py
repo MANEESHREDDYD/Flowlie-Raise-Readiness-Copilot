@@ -11,6 +11,10 @@ KEYWORDS = {
     "investor_meeting": ["investor asked", "question", "follow up", "diligence"],
     "investor_update": ["investor update", "monthly revenue", "growth", "runway"],
     "use_of_funds": ["use of funds", "budget allocation", "hiring plan", "funding plan"],
+    "security": ["soc 2", "security controls", "penetration test", "security audit"],
+    "privacy_security": ["hipaa", "privacy", "phi", "security documentation", "data processing"],
+    "investor_process": ["investor pipeline", "fundraising process", "meeting cadence", "investor follow-up"],
+    "runway_warning": ["runway warning", "cash constraint", "bridge financing", "cost reduction"],
 }
 
 CATEGORIES = {
@@ -23,6 +27,10 @@ CATEGORIES = {
     "investor_meeting": "Fundraising",
     "investor_update": "Fundraising",
     "use_of_funds": "Fundraising",
+    "security": "Security",
+    "privacy_security": "Privacy & security",
+    "investor_process": "Fundraising",
+    "runway_warning": "Finance",
     "unknown": "Other",
 }
 

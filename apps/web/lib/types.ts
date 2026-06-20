@@ -27,3 +27,13 @@ export type RecoveryPath = {
   projected_strict_score: number; projected_range_low: number; projected_range_high: number;
   projected_tier: string; actions: RecoveryAction[]; methodology: string;
 };
+export type CompanySummary = {
+  id: number; name: string; stage: string; industry: string; score: number | null;
+  tier: string; top_risk: string; risk_count: number; open_action_items: number;
+  created_at: string; is_demo: boolean;
+};
+export type CapEntry = { id: number; holder: string; type: string; ownership_percent: number | null; shares: number | null; notes: string | null };
+export type Headcount = { id: number; name: string; role: string; type: string; start_date: string; ip_assignment_signed: boolean; monthly_cost: number };
+export type Pipeline = { id: number; customer: string; stage: string; contract_value: number; probability: number; expected_close_month: string; revenue_concentration: number };
+export type Compliance = { id: number; item: string; status: string; last_updated: string | null; owner: string };
+export type DocumentRecord = { id: number; file_name: string; document_type: string; category: string; status: string; extracted_text: string };

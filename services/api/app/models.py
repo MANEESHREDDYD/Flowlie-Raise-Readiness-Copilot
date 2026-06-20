@@ -21,6 +21,8 @@ class Company(Base):
     contractors: Mapped[int]
     primary_market: Mapped[str] = mapped_column(String(120))
     fundraise_goal: Mapped[str] = mapped_column(Text)
+    is_demo: Mapped[bool] = mapped_column(Boolean, default=False)
+    portfolio_top_risk: Mapped[str | None] = mapped_column(String(160), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     documents: Mapped[list["Document"]] = relationship(cascade="all, delete-orphan")
 

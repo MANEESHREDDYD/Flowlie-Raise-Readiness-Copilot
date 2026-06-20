@@ -1,5 +1,9 @@
 # Flowlie outreach brief
 
+## V1.2: Multi-company and user-entered data
+
+V1.2 makes the concept materially closer to a Flowlie product workflow. A portfolio view lets operators compare several raises, while a founder can create a company and maintain the underlying finance, cap-table, people, pipeline, compliance, and document evidence directly in the product. The resulting analysis is no longer tied to one scripted demo; it runs on arbitrary SQLite-backed company records.
+
 ## Why this feature fits Flowlie
 
 Flowlie already sits close to the operational systems founders use to run a raise. Raise Readiness Copilot extends that position from organizing back-office information to interpreting whether the company is prepared for investor diligence.

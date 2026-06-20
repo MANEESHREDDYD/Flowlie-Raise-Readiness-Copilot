@@ -1,0 +1,5 @@
+name,role,type,start_date,ip_assignment_signed,monthly_cost
+Nina,CEO,employee,2023-02-01,true,0
+Omar,CTO,employee,2023-02-01,true,0
+Rhea,Privacy Lead,employee,2024-08-01,true,16000
+Kai,Clinical Advisor,contractor,2025-03-01,true,9000

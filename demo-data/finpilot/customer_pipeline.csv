@@ -1,0 +1,5 @@
+customer,stage,contract_value,probability,expected_close_month,revenue_concentration
+LedgerWorks,negotiation,160000,0.70,2026-07,0.24
+CashCraft,pilot,120000,0.65,2026-08,0.20
+NorthBank,discovery,220000,0.45,2026-09,0.18
+BooksPro,pilot,90000,0.60,2026-07,0.14

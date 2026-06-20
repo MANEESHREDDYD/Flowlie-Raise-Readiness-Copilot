@@ -1,5 +1,11 @@
 # Flowlie Raise Readiness Copilot
 
+## V1.2: From single demo to persistent company workspace
+
+V1.2 turned the original AtlasAI prototype into a multi-company product surface. The portfolio now compares five synthetic startups with distinct stages, industries, risks, questions, and actions. A founder can also create a company, enter operating records through dashboard forms, upload or paste evidence, run the deterministic engines, and export a report.
+
+The key technical change was removing AtlasAI assumptions from Q&A, risk, and action generation. Engines now tolerate missing collections, disclose insufficient inputs, and add lightweight industry context for fintech security, healthcare privacy/security, and DevTools fundraising process readiness.
+
 ## A local-first diligence intelligence prototype for Seed-stage founders
 
 ### The challenge
