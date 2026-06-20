@@ -88,7 +88,7 @@ flowchart LR
 
 ## Tech stack
 
-- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS, Recharts, Lucide icons
+- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS, Framer Motion, Recharts, Lucide icons
 - Backend: FastAPI, SQLAlchemy, Pydantic, SQLite
 - File parsing: PyMuPDF, python-docx, openpyxl
 - Testing: pytest and a production Next.js build/type check
