@@ -2,7 +2,7 @@
 
 ## Product
 
-**Flowlie Raise Readiness Copilot**
+**F Raise Readiness Copilot**
 
 ## Target user
 
@@ -14,7 +14,7 @@ Fundraise readiness is not one checklist. It is a cross-functional state spread 
 
 ## Solution
 
-Flowlie ingests the company’s existing operating evidence, calculates a transparent readiness score, identifies likely diligence concerns, drafts source-backed answers, and turns missing evidence into a seven-day plan.
+F ingests the company’s existing operating evidence, calculates a transparent readiness score, identifies likely diligence concerns, drafts source-backed answers, and turns missing evidence into a seven-day plan.
 
 ## Why now
 
@@ -25,7 +25,7 @@ Founders are expected to run leaner companies while presenting more complete evi
 The Copilot sits before and during a fundraise:
 
 1. Founder assembles core records.
-2. Flowlie assesses completeness and pressure points.
+2. F assesses completeness and pressure points.
 3. The team resolves the highest-severity gaps.
 4. Investor questions become reusable, source-backed answers.
 5. New meeting notes update the preparation queue.
