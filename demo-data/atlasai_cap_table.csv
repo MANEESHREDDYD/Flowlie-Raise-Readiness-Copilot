@@ -1,0 +1,6 @@
+holder,type,ownership_percent,shares,notes
+Founder A,common,42,4200000,
+Founder B,common,38,3800000,
+Employee Option Pool,option_pool,10,1000000,
+Angel SAFE,safe,,,"$500K SAFE not converted"
+Seed Investor,preferred,10,1000000,

@@ -1,0 +1,8 @@
+name,role,type,start_date,ip_assignment_signed,monthly_cost
+Aarav,CEO,employee,2025-01-01,true,0
+Maya,CTO,employee,2025-01-01,true,0
+Liam,ML Engineer,employee,2025-03-01,true,12000
+Noah,Frontend Engineer,contractor,2025-09-01,false,6500
+Sophia,Data Engineer,contractor,2025-10-15,false,7000
+Ethan,Sales Lead,employee,2025-06-01,true,11000
+Olivia,Product Designer,contractor,2025-11-01,false,5500

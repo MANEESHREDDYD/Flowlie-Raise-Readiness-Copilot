@@ -1,0 +1,5 @@
+customer,stage,contract_value,probability,expected_close_month,revenue_concentration
+Acme Corp,pilot,120000,0.65,2026-07,0.29
+Northstar Health,negotiation,180000,0.50,2026-08,0.43
+BrightOps,discovery,60000,0.25,2026-09,0.14
+UrbanGrid,pilot,40000,0.40,2026-07,0.10
