@@ -168,3 +168,75 @@ def test_generated_outputs_require_review():
             item["review_status"] == "reviewed"
             for item in client.get(f"/companies/{company_id}/risks").json()
         )
+
+
+def test_named_founder_is_counted_from_structural_boolean():
+    with TestClient(app) as client:
+        company_id = client.post(
+            "/companies", json={**COMPANY, "name": "StructuralFounderCo"}
+        ).json()["id"]
+        entry = client.post(f"/companies/{company_id}/cap-table", json={
+            "holder": "Aarav R.",
+            "type": "common",
+            "is_founder": True,
+            "ownership_percent": 80,
+            "shares": 8_000_000,
+        })
+        assert entry.status_code == 200
+        stored = client.get(f"/companies/{company_id}/cap-table").json()
+        assert stored[0]["holder"] == "Aarav R."
+        assert stored[0]["is_founder"] is True
+
+        score = client.post(f"/companies/{company_id}/readiness/run")
+        assert score.status_code == 200
+        assert score.json()["cap_table_score"] == 90
+
+
+def test_risk_founder_facing_note_persists():
+    with TestClient(app) as client:
+        company_id = client.post("/demo/seed-atlasai").json()["company_id"]
+        risks = client.get(f"/companies/{company_id}/risks").json()
+        risk_id = risks[0]["id"]
+
+        updated = client.patch(
+            f"/risks/{risk_id}",
+            json={"founder_facing_note": "Upload the signed evidence before investor access."},
+        )
+        assert updated.status_code == 200
+        assert updated.json()["founder_facing_note"] == (
+            "Upload the signed evidence before investor access."
+        )
+        persisted = client.get(f"/companies/{company_id}/risks").json()
+        assert next(item for item in persisted if item["id"] == risk_id)[
+            "founder_facing_note"
+        ] == "Upload the signed evidence before investor access."
+
+
+def test_demo_reset_only_deletes_demo_companies():
+    with TestClient(app) as client:
+        seeded_id = client.post("/demo/seed-atlasai").json()["company_id"]
+        assert client.get(f"/companies/{seeded_id}").json()["name"] == "AtlasAI"
+        client.post("/demo/reset")
+        assert client.get(f"/companies/{seeded_id}").status_code == 404
+
+        user_atlas = client.post("/companies", json={**COMPANY, "name": "AtlasAI"})
+        assert user_atlas.status_code == 200
+        user_id = user_atlas.json()["id"]
+        client.post("/demo/reset")
+        assert client.get(f"/companies/{user_id}").status_code == 200
+
+
+def test_confidence_audit_covers_all_readiness_components():
+    with TestClient(app) as client:
+        company_id = client.post("/demo/seed-atlasai").json()["company_id"]
+        response = client.get(f"/companies/{company_id}/confidence-audit")
+        assert response.status_code == 200
+        components = {item["component"] for item in response.json()["components"]}
+        assert components == {
+            "Finance",
+            "Data Room",
+            "Compliance",
+            "Cap Table",
+            "Pipeline",
+            "Meeting Follow-up",
+        }

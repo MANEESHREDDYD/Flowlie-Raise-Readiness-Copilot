@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from sqlalchemy import create_engine, inspect, text
@@ -6,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 API_ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = API_ROOT / "flowlie.db"
-DATABASE_URL = f"sqlite:///{DATABASE_PATH.as_posix()}"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DATABASE_PATH.as_posix()}")
 
 
 class Base(DeclarativeBase):

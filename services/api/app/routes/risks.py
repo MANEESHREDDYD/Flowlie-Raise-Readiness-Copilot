@@ -37,6 +37,8 @@ def update_risk(risk_id: int, payload: schemas.RiskUpdate, db: Session = Depends
         risk.status = payload.status
     if payload.operator_note is not None:
         risk.operator_note = payload.operator_note
+    if payload.founder_facing_note is not None:
+        risk.founder_facing_note = payload.founder_facing_note
     if payload.evidence_quality is not None:
         risk.evidence_quality = payload.evidence_quality
     db.commit()
