@@ -74,6 +74,7 @@ def company_summary(db: Session = Depends(get_db)):
             "industry": company.industry,
             "score": score.overall_score if score else None,
             "tier": readiness_tier(score.overall_score) if score else "Not analyzed",
+            "review_status": score.review_status if score else "draft",
             "top_risk": company.portfolio_top_risk or (risks[0].title if risks else "Analysis pending"),
             "risk_count": len(risks),
             "open_action_items": action_count or 0,

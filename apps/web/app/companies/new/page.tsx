@@ -27,7 +27,7 @@ export default function NewCompanyPage() {
     } catch (err) { setError(err instanceof Error ? err.message : "Unable to create company"); }
     finally { setSaving(false); }
   };
-  return <AppLayout><PageHeader eyebrow="User-created company" title="Add a startup" description="Create the company profile first. You can add operating records and documents on the next screen."/>
+  return <AppLayout><PageHeader eyebrow="Evidence intake" title="Intake a company" description="Create the company profile first. You can add founder-provided operating records and documents on the next screen for operator review."/>
     <form onSubmit={submit} className="card mx-auto max-w-4xl p-7"><div className="mb-6 flex items-center gap-3"><span className="rounded-xl bg-mint/10 p-3 text-mint"><Building2/></span><div><h2 className="text-xl font-semibold">Company profile</h2><p className="text-sm text-slate-500">Stored locally in SQLite.</p></div></div>
       <div className="grid gap-5 md:grid-cols-2">
         <Field label="Company name" value={form.name} onChange={v=>set("name",v)} required/>

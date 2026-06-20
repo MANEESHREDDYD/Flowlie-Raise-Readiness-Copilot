@@ -8,3 +8,8 @@ export function StatusBadge({ value }: { value: string }) {
   const style = value === "present" || value === "completed" ? "bg-emerald-400/10 text-emerald-300" : value === "needs_review" ? "bg-amber-400/10 text-amber-200" : "bg-rose-400/10 text-rose-300";
   return <span className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold ${style}`}>{titleCase(value)}</span>;
 }
+export function ReviewBadge({ value }: { value?: string }) {
+  const v = value || "needs_review";
+  const style = v === "reviewed" ? "bg-emerald-400/10 text-emerald-300 border-emerald-400/20" : v === "draft" ? "bg-slate-400/10 text-slate-300 border-white/10" : "bg-amber-400/10 text-amber-200 border-amber-400/20";
+  return <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${style}`}>{titleCase(v)}</span>;
+}

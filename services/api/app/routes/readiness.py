@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from .. import models
+from .. import models, schemas
 from ..database import get_db
 from ..engines.readiness_engine import calculate_readiness
 from .helpers import company_data, company_or_404
@@ -31,5 +31,22 @@ def latest_readiness(company_id: int, db: Session = Depends(get_db)):
     score = db.scalar(select(models.ReadinessScore).where(models.ReadinessScore.company_id == company_id).order_by(models.ReadinessScore.generated_at.desc()))
     if not score:
         raise HTTPException(status_code=404, detail="Readiness analysis has not been run")
+    from ..engines.readiness_engine import readiness_tier
+    return {**score.__dict__, "readiness_tier": readiness_tier(score.overall_score)}
+
+
+@router.patch("/companies/{company_id}/readiness/review")
+def review_readiness(company_id: int, payload: schemas.ReviewStatusUpdate, db: Session = Depends(get_db)):
+    """Let an operator move the latest generated analysis out of the draft state."""
+    company_or_404(db, company_id)
+    score = db.scalar(select(models.ReadinessScore).where(models.ReadinessScore.company_id == company_id).order_by(models.ReadinessScore.generated_at.desc()))
+    if not score:
+        raise HTTPException(status_code=404, detail="Readiness analysis has not been run")
+    score.review_status = payload.review_status
+    for model in [models.RiskFlag, models.InvestorQuestion, models.ActionItem]:
+        for row in db.scalars(select(model).where(model.company_id == company_id)).all():
+            row.review_status = payload.review_status
+    db.commit()
+    db.refresh(score)
     from ..engines.readiness_engine import readiness_tier
     return {**score.__dict__, "readiness_tier": readiness_tier(score.overall_score)}

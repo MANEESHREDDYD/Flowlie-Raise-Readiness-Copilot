@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 Stage = Literal["Pre-Seed", "Seed", "Series A", "Series B", "Growth"]
 RecordStatus = Literal["present", "missing", "needs_review", "outdated"]
+ReviewStatus = Literal["draft", "needs_review", "reviewed"]
 
 
 class ORMModel(BaseModel):
@@ -151,6 +152,10 @@ class DocumentUpdate(BaseModel):
 
 class RiskUpdate(BaseModel):
     status: Literal["open", "completed", "dismissed"]
+
+
+class ReviewStatusUpdate(BaseModel):
+    review_status: ReviewStatus
 
 
 class DocumentOut(ORMModel):

@@ -4,6 +4,12 @@
 
 Flowlie is a local monorepo with a Next.js frontend and a FastAPI service backed by SQLite.
 
+## V1.2: Operator Console and Multi-Company Evidence Intake
+
+V1.2 positions the system as an internal **operator workbench / evidence-intake console** for an embedded back-office team — not a self-serve replacement for Flowlie's embedded team model. An operator reviews founder-provided evidence, identifies diligence gaps, generates source-backed preparation notes, and assigns cleanup work.
+
+Every generated-output table (`readiness_scores`, `risk_flags`, `investor_questions`, `action_items`) carries a `review_status` column with values `draft | needs_review | reviewed`. Generated outputs **default to `needs_review`** via the model default; the additive column is applied to existing local SQLite files by `ensure_v11_columns()` in `database.py`. The portfolio summary returns the latest score's `review_status`, the diligence report renders a draft/operator-review banner, and `PATCH /companies/{id}/readiness/review` lets an operator promote a company's analysis (and its risks, Q&A, and action items) to `reviewed`. The UI surfaces the same state through a review-status badge and "Draft output — requires operator review" notices.
+
 ## V1.2: Multi-company and user-entered data
 
 The data model is company-scoped. Every financial, ownership, people, pipeline, compliance, document, score, risk, question, and action record carries a `company_id`. The portfolio endpoint aggregates the latest generated state without moving analysis logic into the frontend.

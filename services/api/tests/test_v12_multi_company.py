@@ -50,7 +50,9 @@ def test_company_summary():
         rows = response.json()
         assert len([row for row in rows if row["is_demo"]]) == 5
         for row in rows:
-            assert {"name", "stage", "industry", "score", "tier", "top_risk"} <= row.keys()
+            assert {"name", "stage", "industry", "score", "tier", "top_risk", "review_status"} <= row.keys()
+        # Every analyzed demo company starts as an operator-review draft.
+        assert all(row["review_status"] == "needs_review" for row in rows if row["score"] is not None)
 
 
 def test_user_company_creation_and_analysis():
@@ -115,3 +117,33 @@ def test_engines_not_atlasai_only():
         assert fin_q != health_q
         assert "SOC 2 evidence is incomplete" in fin_risks
         assert "Healthcare security documentation is incomplete" in health_risks
+
+
+def test_generated_outputs_require_review():
+    with TestClient(app) as client:
+        seeded = client.post("/demo/seed-all").json()["seeded_companies"]
+        company_id = next(item["id"] for item in seeded if item["name"] == "AtlasAI")
+
+        risks = client.get(f"/companies/{company_id}/risks").json()
+        questions = client.get(f"/companies/{company_id}/investor-qa").json()
+        actions = client.get(f"/companies/{company_id}/action-plan").json()
+        score = client.get(f"/companies/{company_id}/readiness/latest").json()
+
+        assert risks and all(item["review_status"] == "needs_review" for item in risks)
+        assert questions and all(item["review_status"] == "needs_review" for item in questions)
+        assert actions and all(item["review_status"] == "needs_review" for item in actions)
+        assert score["review_status"] == "needs_review"
+
+        report = client.get(f"/companies/{company_id}/diligence-report.md").text
+        assert "requires operator review" in report.lower()
+
+        # An operator can move the draft analysis to reviewed.
+        reviewed = client.patch(
+            f"/companies/{company_id}/readiness/review", json={"review_status": "reviewed"}
+        )
+        assert reviewed.status_code == 200
+        assert reviewed.json()["review_status"] == "reviewed"
+        assert all(
+            item["review_status"] == "reviewed"
+            for item in client.get(f"/companies/{company_id}/risks").json()
+        )

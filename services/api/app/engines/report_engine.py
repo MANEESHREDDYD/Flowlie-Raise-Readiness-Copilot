@@ -29,9 +29,10 @@ def build_diligence_report(
     lines = [
         f"# {company.name} - Diligence Readiness Report",
         "",
-        f"_Generated locally on {date.today().isoformat()} from synthetic evidence._",
+        f"_Generated locally on {date.today().isoformat()} from founder-provided evidence._",
         "",
-        "> Prototype preparation output only. This report does not provide legal, tax, investment, accounting, or financial advice.",
+        f"> **Draft preparation output — requires operator review (review status: {getattr(score, 'review_status', 'needs_review')}).** "
+        "This report is an auditable diligence-preparation draft for a human operator. It does not provide legal, tax, investment, accounting, or financial advice.",
         "",
         "## Executive summary",
         "",
@@ -131,6 +132,6 @@ def build_diligence_report(
         "",
         "---",
         "",
-        "All company data in this report is synthetic. Calculations and recommendations are deterministic and run locally.",
+        "Calculations are deterministic and run locally on founder-provided evidence. Outputs are operator-review drafts, not legal, tax, investment, accounting, or financial advice.",
     ]
     return "\n".join(lines)

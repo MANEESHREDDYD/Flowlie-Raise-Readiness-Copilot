@@ -1,10 +1,16 @@
 # Flowlie Raise Readiness Copilot
 
-A zero-budget, local-first full-stack prototype that turns startup back-office data into explainable fundraising diligence intelligence.
+A zero-budget, local-first full-stack prototype: an **internal operator workbench / evidence-intake console** that turns founder-provided back-office data into auditable, source-backed diligence-preparation drafts for human review.
 
-## V1.2: Multi-company and user-entered data
+> **Positioning:** This is not intended to replace Flowlie's embedded team model. It is a prototype operator workbench showing how founder-provided evidence can be transformed into auditable diligence preparation drafts for human review. All generated output is a draft marked **needs operator review** and does not provide legal, tax, investment, accounting, or financial advice.
 
-V1.2 expands the original AtlasAI demo into a persistent company workspace:
+## V1.2: Operator Console and Multi-Company Evidence Intake
+
+V1.2 reframes the product as an **Operator Console** for an embedded back-office team and expands the original AtlasAI demo into a persistent, multi-company evidence-intake workspace. An operator reviews founder-provided evidence, identifies diligence gaps, generates source-backed preparation notes, and assigns cleanup work.
+
+Every generated output — readiness score, risks, investor Q&A, action items, and the exported report — carries a `review_status` of `draft | needs_review | reviewed` and **defaults to `needs_review`**. The portfolio surfaces this review status per company, and an operator can promote a company's analysis to `reviewed` through `PATCH /companies/{id}/readiness/review`.
+
+What V1.2 adds:
 
 - Five synthetic startups: AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger
 - A `/companies` portfolio comparing scores, tiers, top risks, and open actions
@@ -155,7 +161,7 @@ The `/demo` UI performs the same sequence with one button.
 | Recovery and export | `GET /companies/{id}/recovery-path`, `GET /companies/{id}/diligence-report.md` |
 | Documents | upload, list, analyze, and data-room checklist routes |
 | Financials | monthly series and summary routes |
-| Readiness | run analysis and retrieve latest score |
+| Readiness | run analysis, retrieve latest score, and `PATCH /companies/{id}/readiness/review` to set operator review status |
 | Risks | generate, list, and update status |
 | Investor Q&A | generate/list questions and search source evidence |
 | Action plan | generate/list seven-day tasks |

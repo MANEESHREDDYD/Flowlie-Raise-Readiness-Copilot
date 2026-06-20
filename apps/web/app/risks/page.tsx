@@ -1,6 +1,7 @@
 "use client";
 
 import { AppLayout } from "@/components/Layout";
+import { DraftNotice } from "@/components/DraftNotice";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { RiskCard } from "@/components/RiskCard";
@@ -13,6 +14,7 @@ export default function RisksPage() {
   if (!data) return <AppLayout><div className="muted">Loading risks…</div></AppLayout>;
   const order = ["Critical","High","Medium","Low"];
   return <AppLayout><PageHeader eyebrow="Deterministic risk engine" title="Potential diligence concerns" description={`${data.length} rule-based flags generated from AtlasAI’s synthetic financial, HR, compliance, ownership, pipeline, and meeting evidence.`}/>
+    <div className="mb-6"><DraftNotice text="Draft output — requires operator review. These are potential diligence concerns, not legal or compliance conclusions."/></div>
     <div className="space-y-8">{order.map(severity => {
       const items = data.filter(risk => risk.severity === severity);
       if (!items.length) return null;

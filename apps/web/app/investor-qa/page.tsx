@@ -2,6 +2,7 @@
 
 import { BookOpen, FileQuestion } from "lucide-react";
 import { AppLayout } from "@/components/Layout";
+import { DraftNotice } from "@/components/DraftNotice";
 import { EmptyState } from "@/components/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { Question } from "@/lib/types";
@@ -11,7 +12,8 @@ export default function InvestorQaPage() {
   const {data, loading} = useApi<Question[]>("/companies/1/investor-qa");
   if (!loading && (!data || !data.length)) return <AppLayout><PageHeader eyebrow="Founder preparation" title="Investor diligence Q&A" description="Template-based answers grounded in named source evidence."/><EmptyState/></AppLayout>;
   if (!data) return <AppLayout><div className="muted">Loading Q&A…</div></AppLayout>;
-  return <AppLayout><PageHeader eyebrow="Source-backed answer drafts" title="Investor diligence Q&A" description="Every answer is generated from available evidence and explicitly calls out what is still missing. These are preparation prompts, not legal or investment advice."/>
+  return <AppLayout><PageHeader eyebrow="Source-backed preparation notes" title="Investor diligence Q&A" description="Every answer is generated from available evidence and explicitly calls out what is still missing. These are operator-review preparation notes, not legal or investment advice."/>
+    <div className="mb-6"><DraftNotice text="Draft output — requires operator review. Source-backed preparation notes for a human operator."/></div>
     <div className="space-y-4">{data.map((item,index) => <article className="card p-6" key={item.id}>
       <div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-violet/15 px-2.5 py-1 text-[11px] font-semibold text-violet">Q{index+1}</span><span className="text-xs font-medium text-slate-500">{item.category}</span><span className="ml-auto text-xs text-slate-600">{Math.round(item.confidence*100)}% evidence confidence</span></div>
       <h2 className="mt-4 text-lg font-semibold leading-7">{item.question}</h2>

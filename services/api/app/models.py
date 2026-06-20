@@ -108,6 +108,7 @@ class ReadinessScore(Base):
     meeting_score: Mapped[float]
     overall_score: Mapped[float]
     summary: Mapped[str] = mapped_column(Text)
+    review_status: Mapped[str] = mapped_column(String(20), default="needs_review")
     generated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
@@ -123,6 +124,7 @@ class RiskFlag(Base):
     why_matters_to_investors: Mapped[str] = mapped_column(Text, default="")
     suggested_fix: Mapped[str] = mapped_column(Text)
     status: Mapped[str] = mapped_column(String(20), default="open")
+    review_status: Mapped[str] = mapped_column(String(20), default="needs_review")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
@@ -136,6 +138,7 @@ class InvestorQuestion(Base):
     missing_evidence: Mapped[str] = mapped_column(Text)
     confidence: Mapped[float]
     category: Mapped[str] = mapped_column(String(80))
+    review_status: Mapped[str] = mapped_column(String(20), default="needs_review")
 
 
 class ActionItem(Base):
@@ -149,3 +152,4 @@ class ActionItem(Base):
     category: Mapped[str] = mapped_column(String(80))
     status: Mapped[str] = mapped_column(String(20), default="open")
     estimated_score_lift: Mapped[float] = mapped_column(Float, default=0)
+    review_status: Mapped[str] = mapped_column(String(20), default="needs_review")

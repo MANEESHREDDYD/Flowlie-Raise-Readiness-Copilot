@@ -1,8 +1,10 @@
 # Flowlie outreach brief
 
-## V1.2: Multi-company and user-entered data
+## V1.2: Operator Console and Multi-Company Evidence Intake
 
-V1.2 makes the concept materially closer to a Flowlie product workflow. A portfolio view lets operators compare several raises, while a founder can create a company and maintain the underlying finance, cap-table, people, pipeline, compliance, and document evidence directly in the product. The resulting analysis is no longer tied to one scripted demo; it runs on arbitrary SQLite-backed company records.
+This is not intended to replace Flowlie's embedded team model. It is a prototype operator workbench showing how founder-provided evidence can be transformed into auditable diligence preparation drafts for human review.
+
+V1.2 reframes the concept as an internal operator console for an embedded back-office team. An operator portfolio lets the team compare several raises and see each company's review status, while founder-provided finance, cap-table, people, pipeline, compliance, and document evidence is maintained directly in the product. The resulting analysis is no longer tied to one scripted demo; it runs on arbitrary SQLite-backed company records and every generated output is a draft marked **needs operator review** until a human signs off.
 
 ## Why this feature fits Flowlie
 

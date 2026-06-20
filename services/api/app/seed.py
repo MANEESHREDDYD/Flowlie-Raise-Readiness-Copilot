@@ -189,5 +189,6 @@ def demo_summary(db: Session, companies: list[models.Company]) -> list[dict]:
             "id": company.id, "name": company.name, "stage": company.stage,
             "industry": company.industry, "score": score.overall_score,
             "tier": readiness_tier(score.overall_score), "top_risk": company.portfolio_top_risk,
+            "review_status": score.review_status,
         })
     return summary

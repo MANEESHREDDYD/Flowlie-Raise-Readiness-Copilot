@@ -1,8 +1,14 @@
 # Flowlie Raise Readiness Copilot
 
+## V1.2: Operator Console and Multi-Company Evidence Intake
+
+V1.2 reframes the prototype as an internal **operator workbench / evidence-intake console** for an embedded back-office team, and expands it into a multi-company surface. This is not intended to replace Flowlie's embedded team model. It is a prototype operator workbench showing how founder-provided evidence can be transformed into auditable diligence preparation drafts for human review.
+
+The operator portfolio compares five synthetic startups with distinct stages, industries, risks, questions, and actions, and shows each company's **review status**. An operator can intake a new company, enter founder-provided operating records through dashboard forms, upload or paste evidence, run the deterministic engines, and export a report. Every generated output is a draft that defaults to **needs operator review**, and an operator can promote a reviewed company's analysis once checked.
+
 ## V1.2: From single demo to persistent company workspace
 
-V1.2 turned the original AtlasAI prototype into a multi-company product surface. The portfolio now compares five synthetic startups with distinct stages, industries, risks, questions, and actions. A founder can also create a company, enter operating records through dashboard forms, upload or paste evidence, run the deterministic engines, and export a report.
+V1.2 turned the original AtlasAI prototype into a multi-company product surface. The portfolio now compares five synthetic startups with distinct stages, industries, risks, questions, and actions. An operator can also intake a company, enter founder-provided operating records through dashboard forms, upload or paste evidence, run the deterministic engines, and export a report.
 
 The key technical change was removing AtlasAI assumptions from Q&A, risk, and action generation. Engines now tolerate missing collections, disclose insufficient inputs, and add lightweight industry context for fintech security, healthcare privacy/security, and DevTools fundraising process readiness.
 

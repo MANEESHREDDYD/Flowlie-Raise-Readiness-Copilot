@@ -1,17 +1,18 @@
 # Three-minute demo script
 
-## V1.2 multi-company flow
+## V1.2 operator console flow
 
 1. Open **Demo controls** and select **Seed all companies**.
-2. Open `/companies` and compare AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger.
-3. Open AtlasAI to show the strict 53.4 score and 78–84 recovery path.
-4. Return to the portfolio and select **Add company**.
-5. Create a startup manually, then open its data workspace.
+2. Open `/companies` (the operator portfolio) and compare AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger — note the **Score**, **Status**, **Top risk**, and **Review status** columns. Every analyzed company starts as a `needs_review` draft.
+3. Open AtlasAI to show the strict 53.4 score and 78–84 recovery path. Point out the **Draft analysis — requires operator review** banner.
+4. Return to the portfolio and select **Intake company**.
+5. Create a company manually, then open its evidence-intake workspace.
 6. Add one financial row and one compliance item; optionally paste an investor note.
 7. Select **Run analysis** and show the partial, source-backed dashboard.
-8. Export the user-created company’s Markdown diligence report.
+8. Show the generated dashboard and export the company's Markdown diligence report.
+9. Emphasize that every generated output — score, concerns, preparation notes, cleanup queue, and report — is a **draft for operator review**, not legal, tax, investment, or accounting advice.
 
-The point of the V1.2 demo is that the product is no longer a fixed AtlasAI story: the same local workflow persists and analyzes arbitrary company data.
+The point of the V1.2 demo is that the product is no longer a fixed AtlasAI story and is not positioned as a self-serve replacement for an embedded team: the same local workflow persists and analyzes arbitrary founder-provided evidence into auditable operator-review drafts.
 
 ## 0:00–0:25 — Introduce the problem
 

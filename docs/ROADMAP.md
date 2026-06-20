@@ -2,9 +2,12 @@
 
 ## Completed in V1.2
 
+- Operator console positioning: an internal evidence-intake workbench, not a self-serve replacement for an embedded team
+- `review_status` (`draft | needs_review | reviewed`) on every generated output, defaulting to needs operator review
+- Operator portfolio with per-company review status and an operator review-promotion endpoint
 - Five-company synthetic portfolio
-- User-created companies with SQLite persistence
-- CRUD data-entry workspace
+- Operator/founder-created companies with SQLite persistence
+- CRUD evidence-intake workspace
 - Text-note and file-upload evidence
 - Company-specific analysis and report export
 - Graceful partial analysis and validation
