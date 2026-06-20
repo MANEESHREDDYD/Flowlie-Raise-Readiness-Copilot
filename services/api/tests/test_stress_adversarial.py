@@ -30,8 +30,8 @@ def test_ambiguous_compliance_note_is_not_overclaimed_as_strong():
         doc_res = client.post(f"/companies/{company_id}/documents/text", json={"title": "ambiguous_compliance_note.txt", "text": text, "status": "present"})
         assert doc_res.status_code == 200
         doc = doc_res.json()
-        assert doc["evidence_quality"] in ["weak", "partial", "unknown"]
-        assert doc["evidence_quality"] != "strong"
+        # With 3 keyword hits (409a, state, insurance) out of a small text, it yields "partial"
+        assert doc["evidence_quality"] == "partial"
 
 def test_nonstandard_safe_note_does_not_satisfy_cap_table_modeling_risk():
     with TestClient(app) as client:

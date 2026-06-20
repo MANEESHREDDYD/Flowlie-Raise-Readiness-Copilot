@@ -34,6 +34,9 @@ Two specific bugs were found and fixed during stress testing:
 1. `evidence_quality` was previously binary ("strong" or "unknown"). We introduced real, deterministic rules mapping confidence (e.g. 0.45-0.65 = weak, 0.65-0.85 = partial, 0.85+ = strong) to `evidence_quality`.
 2. The readiness engine used brittle string matching (`entry.holder.lower().startswith("founder")`) to identify founder ownership in the cap table. We replaced this with a structural `is_founder` boolean on the cap table schema.
 
+## What this still does not prove
+This stress test does not prove real-world diligence understanding. It proves that the current deterministic pipeline can fail safely, expose uncertainty, preserve human review, and avoid treating unsupported evidence as strong scoring support.
+
 ## What production hardening would require
 Moving this prototype to production would require:
 1. True structured import with validation (e.g. bulk CSV ingestion with intelligent column mapping).

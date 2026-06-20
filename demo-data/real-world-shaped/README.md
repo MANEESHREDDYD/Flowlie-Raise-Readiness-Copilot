@@ -1,8 +1,7 @@
 # Real-World-Shaped Examples
 
-This directory contains public-template-inspired, real-world-shaped data with synthetic/redacted values. 
-
-It exists to prove that the pipeline has been tested against inputs that are less ideal than the purely synthetic "happy path" demo data used elsewhere.
+This folder contains public-template-inspired, real-world-shaped data with synthetic/redacted values.
+It is designed to test the system's ability to handle structurally complex but entirely fictional data.
 
 ## Files included:
 
