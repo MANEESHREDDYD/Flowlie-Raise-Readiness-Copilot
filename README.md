@@ -56,19 +56,11 @@ Run the app locally, open `http://localhost:3000/demo`, and select Seed & analyz
 
 ### Strict score and recovery path
 
-![AtlasAI dashboard showing the strict score and recovery path](docs/screenshots/dashboard.png)
-
 ### Investor-facing risk context
-
-![Risk flags with investor relevance and suggested fixes](docs/screenshots/risks.png)
 
 ### Source-backed diligence Q&A
 
-![Investor questions with answer drafts, sources, and missing evidence](docs/screenshots/investor-qa.png)
-
 ### Confidence Audit
-
-![Confidence audit showing uncertainty and operator review queue](docs/screenshots/confidence-audit.png)
 
 ## Architecture
 
@@ -88,7 +80,7 @@ flowchart LR
 
 ## Tech stack
 
-- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS, Recharts, Lucide icons
+- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS, Framer Motion, Recharts, Lucide icons
 - Backend: FastAPI, SQLAlchemy, Pydantic, SQLite
 - File parsing: PyMuPDF, python-docx, openpyxl
 - Testing: pytest and a production Next.js build/type check

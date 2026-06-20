@@ -5,13 +5,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#111826",
-        panel: "#111b2e",
-        mint: "#5ee6b0",
-        violet: "#8b7cf6"
+        ink: "#050505",
+        panel: "#0a0a0a",
+        borderDark: "rgba(255,255,255,0.08)",
+        borderHover: "rgba(255,255,255,0.15)"
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(94,230,176,.12), 0 18px 50px rgba(0,0,0,.22)"
+        glow: "none",
+        subtle: "0 4px 20px rgba(0,0,0,0.5)"
       }
     }
   },
