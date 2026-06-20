@@ -1,5 +1,7 @@
 # Diligence Readiness Layer
 
+![Diligence Readiness Layer Dashboard](docs/screenshots/dashboard.png)
+
 Diligence Readiness Layer is an operator-reviewed evidence intelligence module for fundraising preparation.
 
 > **Disclaimer:** This is an independent feature prototype, not a standalone company/product and not affiliated with or endorsed by any company. It explores how an embedded operator team could turn founder-provided evidence into draft diligence-preparation artifacts for human review. It does not provide legal, tax, accounting, investment, or fundraising advice.
