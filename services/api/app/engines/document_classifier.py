@@ -60,11 +60,20 @@ def classify_document(text: str, file_name: str = "") -> dict:
     if confidence < 0.45:
         best_type = "unknown"
 
+    if best_type == "unknown":
+        evidence_quality = "unknown"
+    elif confidence < 0.65:
+        evidence_quality = "weak"
+    elif confidence < 0.85:
+        evidence_quality = "partial"
+    else:
+        evidence_quality = "strong"
+
     return {
         "document_type": best_type,
         "category": CATEGORIES.get(best_type, "unclassified"),
         "confidence": confidence,
         "matched_keywords": best_matches if best_type != "unknown" else [],
         "review_status": "needs_review" if best_type == "unknown" else "draft",
-        "evidence_quality": "unknown" if best_type == "unknown" else "strong",
+        "evidence_quality": evidence_quality,
     }

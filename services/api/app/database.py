@@ -58,6 +58,7 @@ def ensure_v11_columns() -> None:
         ("action_items", "reviewed_by", "ALTER TABLE action_items ADD COLUMN reviewed_by VARCHAR(120)"),
         ("action_items", "reviewed_at", "ALTER TABLE action_items ADD COLUMN reviewed_at DATETIME"),
         ("investor_questions", "evidence_quality", "ALTER TABLE investor_questions ADD COLUMN evidence_quality VARCHAR(20) NOT NULL DEFAULT 'strong'"),
+        ("cap_table_entries", "is_founder", "ALTER TABLE cap_table_entries ADD COLUMN is_founder BOOLEAN NOT NULL DEFAULT 0"),
     ]
     table_names = set(inspector.get_table_names())
     with engine.begin() as connection:

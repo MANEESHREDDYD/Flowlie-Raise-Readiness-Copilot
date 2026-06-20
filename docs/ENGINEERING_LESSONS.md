@@ -1,8 +1,25 @@
 # Engineering Lessons
 
-* **Why the strict 53.4 score was preserved instead of inflated:** Inflated scores don't help founders. We wanted a deterministic, conservative baseline.
-* **Why the recovery path was separated from current readiness:** To explicitly show founders that "readiness" isn't a fixed state, but a function of completed cleanup actions.
-* **Why generated outputs default to `needs_review`:** Because no automated system can provide final legal, financial, or investment judgments. Operator oversight is mandatory.
-* **Why deterministic rules were used before LLMs:** Rules provide auditable, repeatable triage without hallucinations.
-* **Where deterministic rules break down:** They struggle with nuance, unusual edge cases, and highly ambiguous text, where LLMs or human judgment excel.
-* **How a production system could combine rules, retrieval, local/hosted models, and human review:** Rules for initial triage and keyword matching, RAG/LLMs for complex summarization and Q&A, with human operators making the final determinations and managing the "needs_review" queues.
+## The 53.4 Strict Score Story
+In the seed data for `AtlasAI`, the strict readiness score evaluates to exactly `53.4`. This number is preserved intentionally. It represents a baseline where the system rigorously penalizes missing data, unclear documents, and unmitigated risks. We preserve this specific score as an integration test to ensure our deterministic scoring logic and risk penalties don't randomly shift. We separate the recovery path (78-84 range) to show operators the potential uplift from resolving the generated action items, distinguishing current reality from potential readiness.
+
+## Why Generated Outputs Default to Needs Review
+Every piece of ingested data that lacks structural certainty, and every generated artifact (action items, Q&A), starts with a `needs_review` status. In a high-stakes fundraising preparation context, automated systems cannot unilaterally declare a cap table accurate or a legal document completely resolved. The system acts as a draft engine to surface gaps; an operator must always provide the final sign-off.
+
+## Deterministic Rules Before LLMs
+We chose a strictly deterministic approach for scoring, missing inputs, and baseline classifications. We did this because fundraising metrics (e.g. runway months, founder ownership percentages) require exact logic, not probabilistic inference. LLMs are only applied at the very edges of the system (e.g. drafting context-aware questions from transcripts) where deterministic rules fail to capture nuance.
+
+## Where Deterministic Rules Break
+Deterministic rules have clear boundaries:
+* **Ambiguous text:** The document keyword classifier struggles with prose that overlaps multiple categories (e.g. a document mentioning both HR compliance and cap table structure). We catch this via confidence scores.
+* **No structured-import path:** Messy CSVs cannot be imported without building a robust parsing pipeline.
+* **No OCR:** Image-based PDFs are opaque to simple text pipelines.
+* **Brittle string matching:** We discovered a bug where founder ownership was calculated using `entry.holder.lower().startswith("founder")`. Real-world cap tables use actual names. We fixed this by introducing a structural `is_founder` boolean, proving that relying on unstructured names is brittle.
+
+## Moving to Production
+To use this system in production, several architectural changes would be needed:
+1. **Structured import with validation:** We need a robust CSV/Excel ingestion pipeline with column mapping, not just API endpoints for JSON.
+2. **Better document parsing:** Integration with OCR services and deeper semantic analysis instead of simple keyword frequency.
+3. **Confidence scoring depth:** Expanding the engine to cross-validate claims across different documents.
+4. **Reviewer workflows:** Richer UI states for operators to approve, merge, or reject extracted data.
+5. **Security & audit logging:** Strict RLS (Row Level Security), audit trails for operator changes, and SOC2-compliant data handling.

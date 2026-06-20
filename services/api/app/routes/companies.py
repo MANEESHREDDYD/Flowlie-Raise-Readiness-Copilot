@@ -9,6 +9,7 @@ from ..engines.financial_engine import financial_summary
 from ..engines.readiness_engine import readiness_tier
 from ..engines.recovery_engine import build_recovery_path
 from ..engines.report_engine import build_diligence_report
+from ..engines.confidence_engine import calculate_confidence
 from .helpers import company_data, company_or_404
 
 router = APIRouter(prefix="/companies", tags=["companies"])
@@ -114,6 +115,7 @@ def dashboard(company_id: int, db: Session = Depends(get_db)):
         "financial_summary": financial_summary(data["metrics"]),
         "investor_questions_count": db.scalar(select(func.count()).select_from(models.InvestorQuestion).where(models.InvestorQuestion.company_id == company_id)),
         "open_action_items_count": db.scalar(select(func.count()).select_from(models.ActionItem).where(models.ActionItem.company_id == company_id, models.ActionItem.status == "open")),
+        "confidence_audit": calculate_confidence(company=company, readiness_score=score, **data),
     }
 
 
@@ -158,3 +160,15 @@ def diligence_report(company_id: int, db: Session = Depends(get_db)):
         media_type="text/markdown",
         headers={"Content-Disposition": f'attachment; filename="{company.name.lower()}-diligence-report.md"'},
     )
+
+
+@router.get("/{company_id}/confidence-audit", response_model=schemas.ConfidenceAuditOut)
+def confidence_audit(company_id: int, db: Session = Depends(get_db)):
+    company = company_or_404(db, company_id)
+    data = company_data(db, company_id)
+    score = db.scalar(
+        select(models.ReadinessScore)
+        .where(models.ReadinessScore.company_id == company_id)
+        .order_by(models.ReadinessScore.generated_at.desc())
+    )
+    return calculate_confidence(company=company, readiness_score=score, **data)

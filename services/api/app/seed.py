@@ -109,6 +109,7 @@ def seed_company(db: Session, slug: str) -> models.Company:
     for row in _rows(directory, "cap_table.csv"):
         db.add(models.CapTableEntry(
             company_id=company.id, holder=row["holder"], type=row["type"],
+            is_founder=row["holder"].lower().startswith("founder"),
             ownership_percent=float(row["ownership_percent"]) if row["ownership_percent"] else None,
             shares=int(row["shares"]) if row["shares"] else None, notes=row["notes"] or None,
         ))

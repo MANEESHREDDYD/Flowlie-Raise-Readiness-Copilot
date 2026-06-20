@@ -18,8 +18,34 @@ export type Financial = {
   month: string; revenue: number; expenses: number; cash_balance: number; burn: number; gross_margin: number;
 };
 export type FinancialSummary = {
-  latest_revenue: number; latest_burn: number; latest_cash_balance: number; runway_months: number;
-  revenue_growth_percent: number; gross_margin_change: number; burn_increase_percent: number;
+  months_analyzed: number;
+  latest_revenue: number;
+  latest_burn: number;
+  latest_cash_balance: number;
+  runway_months: number;
+  revenue_growth_percent: number;
+  burn_increase_percent: number;
+  gross_margin_change: number;
+};
+
+export type ConfidenceComponent = {
+  component: string;
+  score: number;
+  confidence: string;
+  evidence_coverage: number;
+  structured_records_count: number;
+  unknown_evidence_count: number;
+  needs_review_count: number;
+  reason: string;
+  limitations: string[];
+};
+
+export type ConfidenceAudit = {
+  company_id: number;
+  overall_confidence: string;
+  components: ConfidenceComponent[];
+  unknown_evidence_count: number;
+  needs_review_count: number;
 };
 export type DataRoomItem = { key: string; name: string; category: string; status: string };
 export type ActionItem = { id: number; title: string; priority: string; owner: string; due_date: string; category: string; status: string; estimated_score_lift: number; review_status?: ReviewStatus; evidence_quality?: string; operator_note?: string; founder_facing_note?: string; reviewed_by?: string; reviewed_at?: string; };

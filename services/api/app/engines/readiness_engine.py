@@ -66,7 +66,7 @@ def cap_table_score(entries) -> float:
     if option_pool < 10:
         score -= 10
     founder_ownership = sum(
-        entry.ownership_percent or 0 for entry in entries if entry.holder.lower().startswith("founder")
+        entry.ownership_percent or 0 for entry in entries if entry.is_founder
     )
     if founder_ownership < 50:
         score -= 15

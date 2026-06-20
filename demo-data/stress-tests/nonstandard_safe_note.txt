@@ -1,0 +1,1 @@
+We issued a weird convertible instrument that acts like a SAFE but has a variable valuation cap depending on whether we hit $1M ARR by next year. It converts to preferred shares but might also be repayable.

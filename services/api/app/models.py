@@ -59,6 +59,7 @@ class CapTableEntry(Base):
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id"), index=True)
     holder: Mapped[str] = mapped_column(String(120))
     type: Mapped[str] = mapped_column(String(40))
+    is_founder: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
     ownership_percent: Mapped[float | None] = mapped_column(Float, nullable=True)
     shares: Mapped[int | None] = mapped_column(Integer, nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)

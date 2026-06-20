@@ -73,6 +73,7 @@ class FinancialMetricUpdate(BaseModel):
 class CapTableCreate(BaseModel):
     holder: str = Field(min_length=1)
     type: str = Field(min_length=1)
+    is_founder: bool = False
     ownership_percent: float | None = Field(default=None, ge=0, le=100)
     shares: int | None = Field(default=None, ge=0)
     notes: str | None = None
@@ -81,6 +82,7 @@ class CapTableCreate(BaseModel):
 class CapTableUpdate(BaseModel):
     holder: str | None = Field(default=None, min_length=1)
     type: str | None = Field(default=None, min_length=1)
+    is_founder: bool | None = None
     ownership_percent: float | None = Field(default=None, ge=0, le=100)
     shares: int | None = Field(default=None, ge=0)
     notes: str | None = None
@@ -172,3 +174,23 @@ class DocumentOut(ORMModel):
     evidence_quality: str
     extracted_text: str
     uploaded_at: datetime
+
+
+class ConfidenceComponent(BaseModel):
+    component: str
+    score: float
+    confidence: Literal["strong", "partial", "weak", "unknown"]
+    evidence_coverage: float
+    structured_records_count: int
+    unknown_evidence_count: int
+    needs_review_count: int
+    reason: str
+    limitations: list[str]
+
+
+class ConfidenceAuditOut(BaseModel):
+    company_id: int
+    overall_confidence: Literal["strong", "partial", "weak", "unknown"]
+    components: list[ConfidenceComponent]
+    unknown_evidence_count: int
+    needs_review_count: int

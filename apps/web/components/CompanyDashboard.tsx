@@ -12,13 +12,14 @@ import { RiskCard } from "./RiskCard";
 import { ScoreCard } from "./ScoreCard";
 import { diligenceReportUrl } from "@/lib/api";
 import { money } from "@/lib/format";
-import { ActionItem, Company, FinancialSummary, Question, Readiness, Risk, DataRoomItem, RecoveryPath } from "@/lib/types";
+import { ActionItem, Company, FinancialSummary, Question, Readiness, Risk, DataRoomItem, RecoveryPath, ConfidenceAudit } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
 
 type Dashboard = {
   company: Company; latest_readiness_score: Readiness | null; readiness_tier: string | null;
   recovery_path: RecoveryPath | null; top_risks: Risk[]; missing_documents: DataRoomItem[];
   financial_summary: FinancialSummary; investor_questions_count: number; open_action_items_count: number;
+  confidence_audit?: ConfidenceAudit;
 };
 
 export function CompanyDashboard({ companyId }: { companyId: string | number }) {
@@ -47,6 +48,17 @@ export function CompanyDashboard({ companyId }: { companyId: string | number }) 
     <div className="mt-6 grid gap-6 xl:grid-cols-[1.4fr_.6fr]">
       <section><p className="eyebrow">Priority diligence</p><h2 className="mb-4 mt-2 text-xl font-semibold">Top risk flags</h2><div className="space-y-3">{data.top_risks.map(risk => <RiskCard risk={risk} compact key={risk.id}/>)}</div></section>
       <aside className="space-y-4">
+        {data.confidence_audit && (
+          <div className="card p-5 border-l-4 border-l-blue-500">
+            <h3 className="font-semibold mb-1">Confidence Audit: <span className="capitalize">{data.confidence_audit.overall_confidence}</span></h3>
+            <p className="text-sm text-slate-500 mb-3">
+              {data.confidence_audit.unknown_evidence_count} unknown documents &middot; {data.confidence_audit.needs_review_count} items need review
+            </p>
+            <Link href={`/companies/${companyId}/confidence-audit`} className="text-sm text-blue-600 font-medium hover:underline">
+              View audit &rarr;
+            </Link>
+          </div>
+        )}
         <MetricCard label="Missing / needs review" value={String(data.missing_documents.length)} hint="Required data-room items" icon={FileWarning} tone="amber"/>
         <MetricCard label="Investor questions" value={String(data.investor_questions_count)} hint="Source-backed preparation" icon={HelpCircle} tone="violet"/>
         <MetricCard label="Open action items" value={String(data.open_action_items_count)} hint="Readiness work queue" icon={Activity}/>

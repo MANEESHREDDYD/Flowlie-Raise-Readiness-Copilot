@@ -1,0 +1,8 @@
+Company Name: Acme Synthetic Corp
+Instrument: Simple Agreement for Future Equity (SAFE)
+
+We have raised $500,000 on a post-money valuation cap of $10,000,000 with a 20% discount rate.
+This converts automatically upon an equity financing where we raise at least $2M in preferred stock.
+We also granted a pro rata right to the lead investor who put in $250k.
+
+No option pool was formally created yet but we promised 10% post-financing to future employees.
