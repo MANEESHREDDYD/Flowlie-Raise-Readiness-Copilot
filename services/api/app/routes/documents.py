@@ -20,7 +20,7 @@ async def upload_document(company_id: int, file: UploadFile = File(...), db: Ses
     result = await ingest_upload(file, Path(__file__).resolve().parents[2] / "uploads" / str(company_id))
     document = models.Document(
         company_id=company_id, file_name=result["file_name"], document_type=result["document_type"],
-        category=result["category"], status="present", extracted_text=result["text"],
+        category=result["category"], status="present", review_status=result.get("review_status", "draft"), extracted_text=result["text"],
     )
     db.add(document)
     db.commit()
@@ -39,6 +39,7 @@ def create_text_document(company_id: int, payload: schemas.DocumentTextCreate, d
         document_type=classification["document_type"],
         category=classification["category"],
         status=payload.status,
+        review_status=classification.get("review_status", "draft"),
         extracted_text=payload.text,
     )
     db.add(document)
@@ -58,6 +59,7 @@ def update_document(document_id: int, payload: schemas.DocumentUpdate, db: Sessi
     if "extracted_text" in values and "document_type" not in values:
         result = classify_document(document.extracted_text, document.file_name)
         document.document_type, document.category = result["document_type"], result["category"]
+        document.review_status = result.get("review_status", "draft")
     db.commit()
     db.refresh(document)
     return document

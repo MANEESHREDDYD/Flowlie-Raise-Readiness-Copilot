@@ -1,46 +1,41 @@
-# Flowlie Raise Readiness Copilot
+# DiligenceOps Console
 
-A zero-budget, local-first full-stack prototype: an **internal operator workbench / evidence-intake console** that turns founder-provided back-office data into auditable, source-backed diligence-preparation drafts for human review.
+DiligenceOps Console is a local-first operator workbench that turns synthetic startup evidence into draft diligence preparation artifacts for human review.
 
-> **Positioning:** This is not intended to replace Flowlie's embedded team model. It is a prototype operator workbench showing how founder-provided evidence can be transformed into auditable diligence preparation drafts for human review. All generated output is a draft marked **needs operator review** and does not provide legal, tax, investment, accounting, or financial advice.
+> **Disclaimer:** This is an independent portfolio prototype. It is not affiliated with, endorsed by, or built for any company. It uses synthetic data only and does not provide legal, tax, accounting, investment, or fundraising advice.
 
-## V1.2: Operator Console and Multi-Company Evidence Intake
+## Why this exists
 
-V1.2 reframes the product as an **Operator Console** for an embedded back-office team and expands the original AtlasAI demo into a persistent, multi-company evidence-intake workspace. An operator reviews founder-provided evidence, identifies diligence gaps, generates source-backed preparation notes, and assigns cleanup work.
+Fundraising preparation is usually fragmented across spreadsheets, folders, legal checklists, and founder memory. This console creates a single preparation layer: it identifies the gaps likely to create investor follow-ups, shows the evidence behind every claim, and converts those gaps into a draft cleanup queue for human review.
 
-Every generated output — readiness score, risks, investor Q&A, action items, and the exported report — carries a `review_status` of `draft | needs_review | reviewed` and **defaults to `needs_review`**. The portfolio surfaces this review status per company, and an operator can promote a company's analysis to `reviewed` through `PATCH /companies/{id}/readiness/review`.
+## What it demonstrates
 
-What V1.2 adds:
+This is a prototype showing how founder-provided evidence can be transformed into auditable diligence preparation drafts. It demonstrates engineering judgment, strict rule-based scoring, and the transition of a generic demo into a persistent, multi-company evidence workspace. It uses deterministic keyword classification, explicit scoring rules, templated Q&A, and document-snippet retrieval to make the prototype testable and auditable without an LLM dependency.
 
-- Five synthetic startups: AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger
-- A `/companies` portfolio comparing scores, tiers, top risks, and open actions
-- A guided `/companies/new` workflow for arbitrary startups
-- Dashboard forms for financials, cap table, headcount, pipeline, compliance, and documents
-- SQLite-backed create, edit, and delete operations
-- Company-specific dashboards, analysis runs, and Markdown reports
-- Graceful partial analysis when required evidence has not been added yet
+## What it does not claim
 
-The four comparison-company scores use documented seed-time portfolio calibration targets from the product brief. Component scores, risks, Q&A, and action plans remain deterministic and are generated from each company’s own synthetic records.
+This tool is not claiming to replicate any company’s product or internal tooling. It does not provide legal, tax, investment, accounting, or financial advice. It is not an autonomous compliance engine; all generated outputs are explicitly drafts requiring operator review.
 
-The included synthetic company, **AtlasAI**, is a Seed-stage AI sales automation startup. Flowlie analyzes its financials, data room, compliance checklist, cap table, headcount, customer pipeline, and investor meeting notes to produce:
+## Demo companies
 
-- A weighted **Strict Raise Readiness Score** and readiness tier
-- An evidence-backed Recovery Path with estimated score lift by action
-- A Seed data-room checklist
-- Runway, burn, growth, and margin insights
-- Evidence-backed risk flags
-- Investor diligence questions with suggested answers and named sources
-- A seven-day founder action plan
+The application includes five synthetic startups: AtlasAI, FinPilot, HealthSync, DevToolsHub, and GreenLedger.
+A `/companies` portfolio allows comparing scores, tiers, top risks, and open actions. The included synthetic company, **AtlasAI**, is a Seed-stage AI sales automation startup. The console analyzes its financials, data room, compliance checklist, cap table, headcount, customer pipeline, and investor meeting notes to produce diligence drafts. No paid APIs, external investor databases, or real company data are required.
 
-No paid APIs, external investor databases, or real company data are required.
+## Human review workflow
 
-## Why this matters
+Every generated output — readiness score, risks, investor Q&A, action items, and the exported report — carries a `review_status` of `draft | needs_review | reviewed` and **defaults to `needs_review`**. An operator can promote a company's analysis to `reviewed` after verifying the drafts. If a document cannot be confidently classified, it is marked as `unknown` and requires human review, bypassing automated strong scoring.
 
-Fundraising preparation is usually fragmented across spreadsheets, folders, legal checklists, and founder memory. The Copilot creates a single preparation layer: it identifies the gaps likely to create investor follow-ups, shows the evidence behind every claim, and converts those gaps into owned work.
+## Limitations
 
-> This project is a prototype for portfolio and product demonstration purposes only.
-> It does not provide legal, tax, investment, accounting, or financial advice.
-> All demo data is synthetic.
+* Rule-based scoring is not calibrated on real financing outcomes.
+* Keyword classification does not deeply understand arbitrary legal, financial, or cap-table documents.
+* Real PDFs, scans, OCR errors, unusual cap tables, and ambiguous compliance documents require human review.
+* The system produces drafts, not determinations.
+* The recovery score is a projection based on explicit rule removal, not a prediction of investor behavior.
+* The app does not provide legal, tax, accounting, investment, or fundraising advice.
+* Production use would require security, access control, audit logs, encryption, document versioning, reviewer workflows, and expert validation.
+
+For more context, see [LIMITATIONS.md](docs/LIMITATIONS.md) and [ENGINEERING_LESSONS.md](docs/ENGINEERING_LESSONS.md).
 
 ## Product preview
 
@@ -73,8 +68,6 @@ flowchart LR
     E --> H[7-day action plan]
     H --> G
 ```
-
-The system is deliberately deterministic. Keyword classification, explicit scoring rules, templated Q&A, and document-snippet retrieval make the prototype testable and auditable without an LLM dependency.
 
 ## Tech stack
 
@@ -149,66 +142,6 @@ curl -X POST http://localhost:8000/companies/1/action-plan/generate
 
 The `/demo` UI performs the same sequence with one button.
 
-## API overview
-
-| Area | Endpoints |
-| --- | --- |
-| Demo | `POST /demo/seed`, `POST /demo/reset`, `GET /demo/status` |
-| Multi-company demo | `POST /demo/seed-atlasai`, `POST /demo/seed-all` |
-| Company | `POST /companies`, `GET /companies`, `GET /companies/{id}`, `GET /companies/{id}/dashboard` |
-| Portfolio | `GET /companies/summary` |
-| User data | CRUD routes for financials, cap table, headcount, pipeline, compliance, and documents |
-| Recovery and export | `GET /companies/{id}/recovery-path`, `GET /companies/{id}/diligence-report.md` |
-| Documents | upload, list, analyze, and data-room checklist routes |
-| Financials | monthly series and summary routes |
-| Readiness | run analysis, retrieve latest score, and `PATCH /companies/{id}/readiness/review` to set operator review status |
-| Risks | generate, list, and update status |
-| Investor Q&A | generate/list questions and search source evidence |
-| Action plan | generate/list seven-day tasks |
-
-## Scoring logic
-
-The overall score is the required weighted formula:
-
-```text
-Finance 25% + Data room 25% + Compliance 20% +
-Cap table 15% + Pipeline 10% + Meeting follow-up 5%
-```
-
-Each component begins at 100 (except data-room completeness, which is a document ratio) and receives the deductions described in `readiness_engine.py`.
-
-### AtlasAI score calibration note
-
-The product brief contains an internal numerical conflict. Its requested AtlasAI target is 70–80, but applying every specified deduction exactly produces:
-
-| Component | Score |
-| --- | ---: |
-| Finance | 50.0 |
-| Data room | 61.5 |
-| Compliance | 25.0 |
-| Cap table | 80.0 |
-| Pipeline | 60.0 |
-| Meeting follow-up after Q&A | 50.0 |
-| **Weighted overall** | **53.4** |
-
-This implementation keeps the explicit rules and displays the honest result as the **Strict Raise Readiness Score**. AtlasAI’s tier is **Not diligence-ready**.
-
-The Recovery Path is calculated separately. Completing signed contractor IP assignments, 409A and BOI evidence, a detailed use-of-funds document, and a modeled SAFE removes 25.6 weighted penalty points. That creates a 79.0 point estimate and a displayed review range of **78–84**. The customer-concentration memo is marked “preparedness only” because documentation does not change the underlying concentration metric.
-
-## Risk logic
-
-Risk generation is deterministic and idempotent. AtlasAI triggers flags for short runway, gross-margin decline, burn growth, unsigned contractor IP, missing 409A and BOI evidence, state qualification review, an unmodeled SAFE, customer concentration, and missing use-of-funds detail. Each flag contains:
-
-- Evidence from the synthetic source records
-- Potential business impact
-- Why the issue matters to investors
-- A founder-oriented suggested fix
-- Severity and workflow status
-
-## Source-backed Q&A
-
-The Q&A engine uses calculated metrics and templates. It never invents a missing document or claims a legal conclusion. Each answer includes source filenames, a confidence value, and an explicit `missing_evidence` field. A lightweight search endpoint retrieves relevant snippets by keyword overlap.
-
 ## Tests
 
 Backend:
@@ -232,7 +165,7 @@ npm run build
 
 ## Product narrative
 
-- [Flowlie outreach brief](docs/FLOWLIE_OUTREACH.md)
+- [Private outreach notes](docs/FLOWLIE_OUTREACH.md)
 - [Portfolio case study](docs/CASE_STUDY.md)
 - [Three-minute demo script](docs/DEMO_SCRIPT.md)
 

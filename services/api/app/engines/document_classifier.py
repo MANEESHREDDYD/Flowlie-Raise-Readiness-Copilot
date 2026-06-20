@@ -44,6 +44,7 @@ def classify_document(text: str, file_name: str = "") -> dict:
             "category": "Operations",
             "confidence": 1.0,
             "matched_keywords": ["data room index"],
+            "review_status": "reviewed",
         }
     matches = {
         doc_type: [word for word in words if re.search(rf"\b{re.escape(word)}\b", haystack)]
@@ -53,9 +54,15 @@ def classify_document(text: str, file_name: str = "") -> dict:
     if not best_matches:
         best_type = "unknown"
     possible = max(1, len(KEYWORDS.get(best_type, [])))
+    confidence = round(min(0.99, 0.35 + len(best_matches) / possible), 2) if best_matches else 0.1
+    
+    if confidence < 0.45:
+        best_type = "unknown"
+
     return {
         "document_type": best_type,
         "category": CATEGORIES[best_type],
-        "confidence": round(min(0.99, 0.35 + len(best_matches) / possible), 2) if best_matches else 0.1,
-        "matched_keywords": best_matches,
+        "confidence": confidence,
+        "matched_keywords": best_matches if best_type != "unknown" else [],
+        "review_status": "needs_review" if best_type == "unknown" else "draft",
     }

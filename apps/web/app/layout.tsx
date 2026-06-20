@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Flowlie Raise Readiness Copilot",
-  description: "Turn startup back-office data into investor-ready diligence intelligence.",
+  title: "DiligenceOps Console",
+  description: "An evidence-to-diligence operator workbench for fundraising preparation.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

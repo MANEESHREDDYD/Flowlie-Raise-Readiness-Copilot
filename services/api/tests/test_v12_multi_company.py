@@ -104,6 +104,27 @@ def test_user_documents_text_notes():
         assert any(item["id"] == response.json()["id"] for item in stored)
 
 
+def test_unknown_document_handling():
+    with TestClient(app) as client:
+        _delete_named(client, "NotesCo2")
+        company_id = client.post("/companies", json={**COMPANY, "name": "NotesCo2"}).json()["id"]
+        response = client.post(f"/companies/{company_id}/documents/text", json={
+            "title": "Random Note",
+            "text": "This is completely unrelated text about cooking pizza and random stuff.",
+            "status": "present",
+        })
+        assert response.status_code == 200
+        doc = response.json()
+        assert doc["document_type"] == "unknown"
+        assert doc["review_status"] == "needs_review"
+        
+        stored = client.get(f"/companies/{company_id}/documents").json()
+        assert any(item["id"] == doc["id"] for item in stored)
+        
+        score = client.post(f"/companies/{company_id}/readiness/run")
+        assert score.status_code == 200
+
+
 def test_engines_not_atlasai_only():
     with TestClient(app) as client:
         seeded = client.post("/demo/seed-all").json()["seeded_companies"]

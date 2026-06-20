@@ -165,5 +165,6 @@ class DocumentOut(ORMModel):
     document_type: str
     category: str
     status: str
+    review_status: str
     extracted_text: str
     uploaded_at: datetime

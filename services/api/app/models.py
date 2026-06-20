@@ -35,6 +35,7 @@ class Document(Base):
     document_type: Mapped[str] = mapped_column(String(80))
     category: Mapped[str] = mapped_column(String(80))
     status: Mapped[str] = mapped_column(String(40), default="present")
+    review_status: Mapped[str] = mapped_column(String(20), default="needs_review")
     extracted_text: Mapped[str] = mapped_column(Text, default="")
     uploaded_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
