@@ -97,6 +97,7 @@ def dashboard(company_id: int, db: Session = Depends(get_db)):
     score = db.scalar(select(models.ReadinessScore).where(models.ReadinessScore.company_id == company_id).order_by(models.ReadinessScore.generated_at.desc()))
     severity_order = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
     risks = list(db.scalars(select(models.RiskFlag).where(models.RiskFlag.company_id == company_id)).all())
+    questions = list(db.scalars(select(models.InvestorQuestion).where(models.InvestorQuestion.company_id == company_id)).all())
     risks.sort(key=lambda item: severity_order.get(item.severity, 4))
     room = build_data_room(data["documents"], data["compliance"])
     score_payload = None
@@ -113,9 +114,11 @@ def dashboard(company_id: int, db: Session = Depends(get_db)):
         "top_risks": risks[:5],
         "missing_documents": [item for item in room if item["status"] != "present"],
         "financial_summary": financial_summary(data["metrics"]),
-        "investor_questions_count": db.scalar(select(func.count()).select_from(models.InvestorQuestion).where(models.InvestorQuestion.company_id == company_id)),
+        "investor_questions_count": len(questions),
         "open_action_items_count": db.scalar(select(func.count()).select_from(models.ActionItem).where(models.ActionItem.company_id == company_id, models.ActionItem.status == "open")),
-        "confidence_audit": calculate_confidence(company=company, readiness_score=score, **data),
+        "confidence_audit": calculate_confidence(
+            company=company, readiness_score=score, questions=questions, **data
+        ),
     }
 
 
@@ -171,4 +174,9 @@ def confidence_audit(company_id: int, db: Session = Depends(get_db)):
         .where(models.ReadinessScore.company_id == company_id)
         .order_by(models.ReadinessScore.generated_at.desc())
     )
-    return calculate_confidence(company=company, readiness_score=score, **data)
+    questions = list(db.scalars(
+        select(models.InvestorQuestion).where(models.InvestorQuestion.company_id == company_id)
+    ).all())
+    return calculate_confidence(
+        company=company, readiness_score=score, questions=questions, **data
+    )

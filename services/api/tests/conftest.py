@@ -1,24 +1,38 @@
-import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
+import os
+import tempfile
+import uuid
+from pathlib import Path
 
-from app.database import Base
+import pytest
+
+
+TEST_DATABASE_PATH = Path(tempfile.gettempdir()) / f"diligence-readiness-{uuid.uuid4().hex}.db"
+os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DATABASE_PATH.as_posix()}"
+
+from app.database import Base, SessionLocal, engine
 from app.seed import seed_demo
+
+
+@pytest.fixture(autouse=True)
+def isolated_database():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    try:
+        yield
+    finally:
+        Base.metadata.drop_all(bind=engine)
 
 
 @pytest.fixture()
 def db():
-    engine = create_engine(
-        "sqlite://",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
-    )
-    Base.metadata.create_all(engine)
-    session = sessionmaker(bind=engine)()
+    session = SessionLocal()
     seed_demo(session)
     try:
         yield session
     finally:
         session.close()
-        Base.metadata.drop_all(engine)
+
+
+def pytest_sessionfinish(session, exitstatus):
+    engine.dispose()
+    TEST_DATABASE_PATH.unlink(missing_ok=True)

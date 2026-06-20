@@ -10,7 +10,15 @@ import { api, upload } from "@/lib/api";
 import { Company, DocumentRecord } from "@/lib/types";
 import { useApi } from "@/lib/useApi";
 
-type Field = { key: string; label: string; type?: "text"|"number"|"boolean"|"select"; options?: string[]; step?: string; nullable?: boolean };
+type Field = {
+  key: string;
+  label: string;
+  type?: "text"|"number"|"boolean"|"select";
+  options?: string[];
+  step?: string;
+  nullable?: boolean;
+  helper?: string;
+};
 
 const sections = [
   "Company profile","Financials","Cap table","Headcount","Customer pipeline","Compliance checklist","Documents / notes",
@@ -27,7 +35,12 @@ export default function EditDataPage() {
       {key:"month",label:"Month (YYYY-MM)"},{key:"revenue",label:"Revenue",type:"number"},{key:"expenses",label:"Expenses",type:"number"},{key:"cash_balance",label:"Cash balance",type:"number"},{key:"burn",label:"Burn",type:"number"},{key:"gross_margin",label:"Gross margin (0–1)",type:"number",step:"0.01"},
     ]}/>}
     {active==="Cap table" && <RecordEditor companyId={id} title="Cap table entries" endpoint="cap-table" editBase="cap-table" fields={[
-      {key:"holder",label:"Holder"},{key:"type",label:"Security type"},{key:"ownership_percent",label:"Ownership %",type:"number",step:"0.01",nullable:true},{key:"shares",label:"Shares",type:"number",nullable:true},{key:"notes",label:"Notes",nullable:true},
+      {key:"holder",label:"Holder"},
+      {key:"type",label:"Security type"},
+      {key:"is_founder",label:"Founder / founding holder",type:"boolean",helper:"Used for founder ownership scoring. Prefer this over name-based detection."},
+      {key:"ownership_percent",label:"Ownership %",type:"number",step:"0.01",nullable:true},
+      {key:"shares",label:"Shares",type:"number",nullable:true},
+      {key:"notes",label:"Notes",nullable:true},
     ]}/>}
     {active==="Headcount" && <RecordEditor companyId={id} title="Headcount records" endpoint="headcount" editBase="headcount" fields={[
       {key:"name",label:"Name"},{key:"role",label:"Role"},{key:"type",label:"Type",type:"select",options:["employee","contractor"]},{key:"start_date",label:"Start date"},{key:"ip_assignment_signed",label:"IP assignment signed",type:"boolean"},{key:"monthly_cost",label:"Monthly cost",type:"number"},
@@ -61,7 +74,7 @@ function RecordEditor({companyId,title,endpoint,editBase,fields}:{companyId:stri
   const submit=async(e:FormEvent)=>{e.preventDefault();setError("");try{const payload:Record<string,unknown>={};fields.forEach(field=>{const value=form[field.key];if(field.type==="number")payload[field.key]=value===""&&field.nullable?null:Number(value);else if(field.type==="boolean")payload[field.key]=value===true||value==="true";else payload[field.key]=value===""&&field.nullable?null:value;});await api(editing?`/${editBase}/${editing}`:`/companies/${companyId}/${endpoint}`,{method:editing?"PATCH":"POST",body:JSON.stringify(payload)});setEditing(null);setForm(blank);await records.refresh();}catch(err){setError(formatError(err));}};
   const edit=(row:Record<string,any>)=>{setEditing(row.id);setForm(Object.fromEntries(fields.map(f=>[f.key,String(row[f.key]??"")])));};
   const remove=async(id:number)=>{await api(`/${editBase}/${id}`,{method:"DELETE"});await records.refresh();};
-  return <div className="grid gap-6 xl:grid-cols-[.8fr_1.2fr]"><form onSubmit={submit} className="card p-6"><div className="flex items-center justify-between"><h2 className="text-xl font-semibold">{editing?"Edit":"Add"} record</h2>{editing&&<button type="button" className="text-xs text-slate-400" onClick={()=>{setEditing(null);setForm(blank)}}>Cancel</button>}</div><div className="mt-5 grid gap-4">{fields.map(field=><label className="form-label" key={field.key}>{field.label}{field.type==="select"?<select className="form-input" value={form[field.key]} onChange={e=>setForm({...form,[field.key]:e.target.value})}>{field.options?.map(x=><option key={x} value={x}>{x}</option>)}</select>:field.type==="boolean"?<select className="form-input" value={String(form[field.key])} onChange={e=>setForm({...form,[field.key]:e.target.value})}><option value="true">True</option><option value="false">False</option></select>:<input className="form-input" type={field.type||"text"} step={field.step} min={field.type==="number"?"0":undefined} max={["gross_margin","probability","revenue_concentration"].includes(field.key)?"1":field.key==="ownership_percent"?"100":undefined} value={form[field.key]??""} onChange={e=>setForm({...form,[field.key]:e.target.value})} required={!field.nullable}/>}</label>)}</div>{error&&<p className="mt-4 rounded-xl bg-rose-500/10 p-3 text-xs text-rose-300">{error}</p>}<button className="button mt-5">{editing?<Save size={15}/>:<Plus size={15}/>} {editing?"Save changes":"Add record"}</button></form>
+  return <div className="grid gap-6 xl:grid-cols-[.8fr_1.2fr]"><form onSubmit={submit} className="card p-6"><div className="flex items-center justify-between"><h2 className="text-xl font-semibold">{editing?"Edit":"Add"} record</h2>{editing&&<button type="button" className="text-xs text-slate-400" onClick={()=>{setEditing(null);setForm(blank)}}>Cancel</button>}</div><div className="mt-5 grid gap-4">{fields.map(field=><label className="form-label" key={field.key}>{field.type==="boolean"?<span className="rounded-lg border border-borderDark bg-[#0a0a0a] p-3"><span className="flex items-center gap-3 text-sm text-white"><input type="checkbox" checked={form[field.key]===true||form[field.key]==="true"} onChange={e=>setForm({...form,[field.key]:e.target.checked})}/>{field.label}</span>{field.helper&&<span className="mt-2 block text-xs font-normal leading-5 text-[#777]">{field.helper}</span>}</span>:<>{field.label}{field.type==="select"?<select className="form-input" value={form[field.key]} onChange={e=>setForm({...form,[field.key]:e.target.value})}>{field.options?.map(x=><option key={x} value={x}>{x}</option>)}</select>:<input className="form-input" type={field.type||"text"} step={field.step} min={field.type==="number"?"0":undefined} max={["gross_margin","probability","revenue_concentration"].includes(field.key)?"1":field.key==="ownership_percent"?"100":undefined} value={form[field.key]??""} onChange={e=>setForm({...form,[field.key]:e.target.value})} required={!field.nullable}/>} {field.helper&&<span className="text-xs font-normal leading-5 text-[#777]">{field.helper}</span>}</>}</label>)}</div>{error&&<p className="mt-4 rounded-xl bg-rose-500/10 p-3 text-xs text-rose-300">{error}</p>}<button className="button mt-5">{editing?<Save size={15}/>:<Plus size={15}/>} {editing?"Save changes":"Add record"}</button></form>
     <section><h2 className="mb-4 text-xl font-semibold">{title}</h2>{!records.data?.length?<div className="card p-8 text-center text-sm text-slate-500">No records yet. Add the first record using the form.</div>:<div className="space-y-3">{records.data.map(row=><article className="card p-4" key={row.id}><div className="flex items-start justify-between gap-3"><div className="grid flex-1 gap-2 sm:grid-cols-2">{fields.slice(0,4).map(field=><p key={field.key} className="text-sm"><span className="text-slate-500">{field.label}: </span><span className="text-slate-200">{String(row[field.key]??"—")}</span></p>)}</div><div className="flex gap-2"><button className="button-secondary !p-2" onClick={()=>edit(row)}><Pencil size={14}/></button><button className="button-secondary !p-2 text-rose-300" onClick={()=>remove(row.id)}><Trash2 size={14}/></button></div></div></article>)}</div>}</section></div>;
 }
 

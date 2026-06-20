@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from sqlalchemy import create_engine, inspect, text
@@ -6,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 API_ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = API_ROOT / "f.db"
-DATABASE_URL = f"sqlite:///{DATABASE_PATH.as_posix()}"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DATABASE_PATH.as_posix()}")
 
 
 class Base(DeclarativeBase):
@@ -29,11 +30,11 @@ def get_db():
 
 
 def ensure_v11_columns() -> None:
-    """Apply additive V1.1/V1.2 columns to an existing local SQLite file.
+    """Apply additive prototype columns to an existing local SQLite file.
 
-    Each entry is (table, column, ALTER statement). The V1.2 operator console
-    adds a ``review_status`` column to every generated-output table so that
-    drafts default to ``needs_review`` until an operator reviews them.
+    Each entry is (table, column, ALTER statement). This lightweight migration
+    bridge keeps existing local databases usable without introducing a paid
+    service or external migration dependency.
     """
     inspector = inspect(engine)
     migrations = [

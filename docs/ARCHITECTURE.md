@@ -1,114 +1,76 @@
 # Architecture
 
-## System overview
+## Positioning
 
-The module is a local monorepo with a Next.js frontend and a FastAPI service backed by SQLite.
+Diligence Readiness Layer is an independent feature-layer prototype for operator-reviewed fundraising diligence preparation. It is not positioned as a standalone company, an autonomous adviser, or an endorsed extension of another product.
 
-## V1.2: Operator Module and Multi-Company Evidence Intake
+## Runtime
 
-V1.2 positions the system as an internal **operator intelligence module / evidence-intake feature** for an embedded back-office team — not a self-serve tool. An operator reviews founder-provided evidence, identifies diligence gaps, generates source-backed preparation notes, and assigns cleanup work.
-
-Every generated-output table (`readiness_scores`, `risk_flags`, `investor_questions`, `action_items`) carries a `review_status` column with values `draft | needs_review | reviewed`. Generated outputs **default to `needs_review`** via the model default; the additive column is applied to existing local SQLite files by `ensure_v11_columns()` in `database.py`. The portfolio summary returns the latest score's `review_status`, the diligence report renders a draft/operator-review banner, and `PATCH /companies/{id}/readiness/review` lets an operator promote a company's analysis (and its risks, Q&A, and action items) to `reviewed`. The UI surfaces the same state through a review-status badge and "Draft output — requires operator review" notices.
-
-## V1.2: Multi-company and user-entered data
-
-The data model is company-scoped. Every financial, ownership, people, pipeline, compliance, document, score, risk, question, and action record carries a `company_id`. The portfolio endpoint aggregates the latest generated state without moving analysis logic into the frontend.
-
-User-created companies and records are written directly to SQLite through validated FastAPI CRUD routes. Uploaded files are extracted locally; pasted notes use the same keyword classifier. Analysis engines accept partial collections and return missing-input guidance instead of failing.
-
-The demo seeder reads five company directories. It runs the same risk, Q&A, readiness, and action engines used for user data. Requested portfolio benchmark scores for the four comparison companies are stored as documented demo snapshots after deterministic component calculation.
+- Next.js 16 and React 19 provide the company portfolio and evidence workspace.
+- FastAPI owns validation, persistence, extraction, and analysis.
+- SQLite stores demo and user-entered company data.
+- PyMuPDF, python-docx, and openpyxl extract supported local files.
+- No paid API or hosted model is required.
 
 ```mermaid
 flowchart TB
-  subgraph Browser
-    UI[Next.js App Router UI]
-  end
-  subgraph Local API
-    API[FastAPI routes]
-    ING[Ingestion + extraction]
-    CLASS[Keyword classifier]
-    READY[Readiness engine]
-    RISK[Risk engine]
-    RECOVERY[Recovery projection]
-    QA[Template Q&A]
-    SEARCH[Keyword evidence search]
-    PLAN[Action-plan engine]
-  end
+  UI[Next.js company-scoped UI]
+  API[FastAPI routes]
   DB[(SQLite)]
-  FILES[Demo files / uploaded files]
-  FORMS[Company data-entry forms]
+  INGEST[Local extraction and classification]
+  SCORE[Six-component readiness engine]
+  RISK[Deterministic risk engine]
+  QA[Template Q&A and evidence search]
+  PLAN[Seven-day cleanup queue]
+  CONF[Six-component confidence audit]
+  REPORT[Markdown report]
 
   UI <--> API
-  FORMS --> API
-  FILES --> ING --> CLASS --> DB
   API <--> DB
-  DB --> READY
-  DB --> RISK
-  DB --> RECOVERY
-  DB --> QA
-  DB --> SEARCH
-  RISK --> PLAN
-  RECOVERY --> UI
+  API --> INGEST --> DB
+  DB --> SCORE --> API
+  DB --> RISK --> API
+  DB --> QA --> API
+  RISK --> PLAN --> API
+  DB --> CONF --> API
+  DB --> REPORT --> API
 ```
 
-## Frontend/backend separation
+## Company routing
 
-The UI is a client of the JSON API and contains no scoring logic. `NEXT_PUBLIC_API_URL` controls the service location. Reusable dashboard components handle score, metric, badge, risk, and empty-state presentation.
+Company-specific views live under `/companies/[id]/...`. The sidebar derives links from the active company ID. Legacy top-level section URLs redirect to the company portfolio instead of silently reading company `1`.
 
-FastAPI owns persistence, file ingestion, deterministic analysis, and source attribution. CORS is restricted to local frontend origins by default.
+## Data model
 
-## Database models
+Every financial, cap-table, headcount, pipeline, compliance, document, score, risk, question, and action record carries a `company_id`.
 
-The relational model covers Company, Document, FinancialMetric, CapTableEntry, HeadcountRecord, CustomerPipelineRecord, ComplianceItem, ReadinessScore, RiskFlag, InvestorQuestion, and ActionItem. Generated entities are stored so the product can show an analysis snapshot instead of recalculating on every page load.
+`Company.is_demo` is the sole deletion marker used by demo reset. A user company is never deleted because its name resembles a synthetic demo.
 
-## Analysis engines
+Cap-table founder ownership uses the explicit `is_founder` field. Holder-name matching is retained only in synthetic seed import, where the fixture convention is controlled.
 
-### Scoring
+## Analysis
 
-`readiness_engine.py` calculates six 0–100 component scores and applies the specified weights. Every deduction is transparent and unit tested.
+The strict score combines six deterministic components:
 
-### Risk generation
+| Component | Weight |
+| --- | ---: |
+| Finance | 25% |
+| Data room | 25% |
+| Compliance | 20% |
+| Cap table | 15% |
+| Pipeline | 10% |
+| Meeting follow-up | 5% |
 
-`risk_engine.py` evaluates explicit conditions and creates structured flags. Generation routes replace prior generated flags, making reruns deterministic and preventing duplicates.
+Risk rules evaluate explicit financial, ownership, people, compliance, commercial, fundraising, and industry conditions. Q&A templates use calculated facts and named source files. Recovery projections remove only documented weighted penalties.
 
-### Q&A
+## Confidence audit
 
-`qa_engine.py` turns computed facts and known gaps into ten founder preparation questions. Answers are templates populated with metrics and evidence—not freeform model output.
+The confidence audit mirrors all six readiness components. It reports `strong`, `partial`, `weak`, or `unknown` using observable coverage rules. These labels are heuristic workflow signals, not statistical probabilities.
 
-### Search
+## Test isolation
 
-`search_engine.py` tokenizes the query and extracted document text, ranks keyword overlap, and returns short source snippets. It is intentionally simple enough to inspect and can later be replaced by SQLite FTS5 or TF-IDF.
+Pytest sets `DATABASE_URL` before importing the application. The suite creates a unique temporary SQLite file, recreates tables for each test, and deletes the file at session end. FastAPI lifespan startup and route dependencies therefore never touch the developer database.
 
-### Action planning
+## Production boundaries
 
-`action_plan_engine.py` maps the known AtlasAI risk classes into a seven-day sequence with owner, priority, due date, category, status, and estimated strict-score lift.
-
-### Recovery projection
-
-`recovery_engine.py` removes only the weighted penalties directly addressed by specified cleanup evidence. For AtlasAI, that produces a 79.0 point estimate and a 78–84 review range. Preparedness documents that do not alter an underlying metric receive zero strict-score lift.
-
-### Markdown report
-
-The report engine assembles the latest stored analysis, source inventory, recovery math, risks, Q&A, and action plan into a downloadable Markdown artifact.
-
-## File ingestion
-
-Uploads support TXT/Markdown, JSON, CSV, PDF, DOCX, and XLSX. The extractor converts each format to text, then the classifier assigns a type, category, confidence, and matched keywords.
-
-## Zero-budget AI strategy
-
-The prototype treats “AI” as an orchestration pattern rather than an API dependency:
-
-1. Extract and normalize evidence.
-2. Classify with observable keyword matches.
-3. Calculate facts with deterministic functions.
-4. Generate risks from explicit conditions.
-5. Populate answer templates only from available facts.
-6. Attach named sources and missing-evidence statements.
-7. Convert risk classes into owned tasks.
-
-This produces predictable demos, supports tests, and avoids hallucinated claims.
-
-## Production evolution
-
-SQLite can move to PostgreSQL; keyword retrieval can move to FTS5, TF-IDF, or pgvector; and optional local Ollama output can rewrite already-grounded answers. The rule results should remain the source of truth even if a language model is added.
+Production use would require identity and organization isolation, authorization, encryption, audit logs, document versioning, background jobs, reviewer assignments, migration tooling, OCR, and domain-expert validation.

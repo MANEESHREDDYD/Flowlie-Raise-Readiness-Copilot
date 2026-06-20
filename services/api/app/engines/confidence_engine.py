@@ -10,12 +10,17 @@ def calculate_confidence(
     compliance: list[models.ComplianceItem],
     documents: list[models.Document],
     readiness_score: models.ReadinessScore | None,
+    questions: list[models.InvestorQuestion] | None = None,
 ) -> dict:
+    questions = questions or []
     components = []
-    
+
     # Analyze total documents for global unknown/needs_review counts
     global_unknown_docs = sum(1 for d in documents if d.document_type == "unknown")
-    global_needs_review_docs = sum(1 for d in documents if d.review_status == "needs_review")
+    global_needs_review_items = (
+        sum(1 for d in documents if d.review_status == "needs_review")
+        + sum(1 for q in questions if q.review_status == "needs_review")
+    )
 
     # Finance Component
     finance_score = readiness_score.finance_score if readiness_score else 0.0
@@ -179,6 +184,118 @@ def calculate_confidence(
         "limitations": limitations
     })
 
+    # Pipeline Component
+    pipeline_score = readiness_score.pipeline_score if readiness_score else 0.0
+    pipeline_docs = [
+        d for d in documents
+        if d.document_type == "customer_pipeline" or d.category in {"Commercial", "GTM"}
+    ]
+    unknown_pipeline = sum(
+        1 for d in documents
+        if d.document_type == "unknown"
+        and any(keyword in f"{d.file_name} {d.extracted_text}".lower() for keyword in ("pipeline", "customer", "gtm"))
+    )
+    review_pipeline = sum(1 for d in pipeline_docs if d.review_status == "needs_review")
+    high_concentration = any(record.revenue_concentration > 0.30 for record in pipeline)
+    complete_probability = all(0 <= record.probability <= 1 for record in pipeline)
+    complete_concentration = all(0 <= record.revenue_concentration <= 1 for record in pipeline)
+
+    if len(pipeline) >= 3 and complete_probability and complete_concentration:
+        conf = "partial" if high_concentration else "strong"
+        reason = "Structured pipeline records include probability and revenue concentration."
+        limitations = (
+            ["Customer concentration is material and still needs operator context."]
+            if high_concentration else
+            ["Pipeline probabilities are founder-provided and are not independently verified."]
+        )
+        coverage = 0.75 if high_concentration else 0.9
+    elif pipeline:
+        conf, reason = "partial", "Some structured pipeline evidence exists, but coverage is limited."
+        limitations = ["Add at least three opportunities with probability, close timing, and concentration."]
+        coverage = 0.45
+    elif pipeline_docs:
+        conf, reason = "weak", "Only unstructured customer or GTM evidence is available."
+        limitations = ["Structured pipeline records are required for concentration and probability checks."]
+        coverage = 0.2
+    else:
+        conf, reason = "unknown", "No customer pipeline evidence is available."
+        limitations = ["Customer pipeline and concentration inputs are missing."]
+        coverage = 0.0
+
+    if unknown_pipeline and conf != "unknown":
+        conf = "partial" if conf == "strong" else conf
+        limitations.append("Unclassified GTM evidence requires operator mapping.")
+
+    components.append({
+        "component": "Pipeline",
+        "score": pipeline_score,
+        "confidence": conf,
+        "evidence_coverage": coverage,
+        "structured_records_count": len(pipeline),
+        "unknown_evidence_count": unknown_pipeline,
+        "needs_review_count": review_pipeline,
+        "reason": reason,
+        "limitations": limitations,
+    })
+
+    # Meeting Follow-up Component
+    meeting_score = readiness_score.meeting_score if readiness_score else 0.0
+    meeting_docs = [
+        d for d in documents if d.document_type in {"investor_meeting", "investor_process"}
+    ]
+    unknown_meeting = sum(
+        1 for d in documents
+        if d.document_type == "unknown"
+        and any(keyword in f"{d.file_name} {d.extracted_text}".lower() for keyword in ("investor", "meeting", "follow-up", "follow up"))
+    )
+    review_meeting = (
+        sum(1 for d in meeting_docs if d.review_status == "needs_review")
+        + sum(1 for q in questions if q.review_status == "needs_review")
+    )
+    unanswered_questions = sum(
+        1 for question in questions
+        if question.missing_evidence
+        and question.missing_evidence.strip().lower() != "no material gap detected."
+    )
+
+    if meeting_docs and len(questions) >= 5:
+        if unanswered_questions or review_meeting:
+            conf, reason = "partial", "Meeting evidence and generated follow-up questions exist, but gaps remain open or unreviewed."
+            limitations = [f"{unanswered_questions} generated preparation item(s) still identify missing evidence."]
+            coverage = 0.7
+        else:
+            conf, reason = "strong", "Meeting evidence is linked to a reviewed preparation-question set."
+            limitations = ["Meeting notes remain founder- or operator-provided evidence."]
+            coverage = 0.9
+    elif meeting_docs:
+        conf, reason = "weak", "Investor meeting evidence exists without a complete generated follow-up set."
+        limitations = ["Generate and review investor preparation questions."]
+        coverage = 0.3
+    elif questions:
+        conf, reason = "weak", "Preparation questions exist, but no investor meeting note or transcript supports them."
+        limitations = ["Add an investor meeting transcript or follow-up note."]
+        coverage = 0.2
+    else:
+        conf, reason = "unknown", "No investor meeting evidence or follow-up questions are available."
+        limitations = ["Meeting notes and generated preparation questions are missing."]
+        coverage = 0.0
+
+    if unknown_meeting and conf != "unknown":
+        conf = "partial" if conf == "strong" else conf
+        limitations.append("Unclassified investor-meeting evidence requires operator review.")
+
+    components.append({
+        "component": "Meeting Follow-up",
+        "score": meeting_score,
+        "confidence": conf,
+        "evidence_coverage": coverage,
+        "structured_records_count": len(questions),
+        "unknown_evidence_count": unknown_meeting,
+        "needs_review_count": review_meeting,
+        "reason": reason,
+        "limitations": limitations,
+    })
+
     # Overall Confidence Calculation
     confidence_levels = [c["confidence"] for c in components]
     if "unknown" in confidence_levels:
@@ -195,5 +312,5 @@ def calculate_confidence(
         "overall_confidence": overall,
         "components": components,
         "unknown_evidence_count": global_unknown_docs,
-        "needs_review_count": global_needs_review_docs
+        "needs_review_count": global_needs_review_items
     }

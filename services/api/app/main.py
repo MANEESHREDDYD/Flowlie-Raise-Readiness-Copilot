@@ -15,9 +15,9 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(
-    title="F Raise Readiness Copilot API",
+    title="Diligence Readiness Layer API",
     description="Local-first, deterministic fundraising diligence intelligence for synthetic startup data.",
-    version="0.1.0",
+    version="0.4.0",
     lifespan=lifespan,
 )
 app.add_middleware(
@@ -42,7 +42,7 @@ for router in [
 
 @app.get("/")
 def root():
-    return {"name": "F Raise Readiness Copilot API", "docs": "/docs", "status": "ok"}
+    return {"name": "Diligence Readiness Layer API", "docs": "/docs", "status": "ok"}
 
 
 @app.get("/health")

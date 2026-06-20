@@ -61,7 +61,7 @@ export type CompanySummary = {
   tier: string; review_status: ReviewStatus; top_risk: string; risk_count: number; open_action_items: number;
   created_at: string; is_demo: boolean;
 };
-export type CapEntry = { id: number; holder: string; type: string; ownership_percent: number | null; shares: number | null; notes: string | null };
+export type CapEntry = { id: number; holder: string; type: string; is_founder: boolean; ownership_percent: number | null; shares: number | null; notes: string | null };
 export type Headcount = { id: number; name: string; role: string; type: string; start_date: string; ip_assignment_signed: boolean; monthly_cost: number };
 export type Pipeline = { id: number; customer: string; stage: string; contract_value: number; probability: number; expected_close_month: string; revenue_concentration: number };
 export type Compliance = { id: number; item: string; status: string; last_updated: string | null; owner: string };

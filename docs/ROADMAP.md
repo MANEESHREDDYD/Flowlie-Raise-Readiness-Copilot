@@ -1,49 +1,34 @@
 # Roadmap
 
-## Completed in V1.2
+## Completed in 0.4.0 release candidate
 
-- Feature module positioning: an internal evidence-intake feature, not a self-serve tool
-- `review_status` (`draft | needs_review | reviewed`) on every generated output, defaulting to needs operator review
-- Operator queue with per-company review status and an operator review-promotion endpoint
 - Five-company synthetic portfolio
-- Operator/founder-created companies with SQLite persistence
-- CRUD evidence-intake workspace
-- Text-note and file-upload evidence
-- Company-specific analysis and report export
-- Graceful partial analysis and validation
+- Persistent user-created companies and evidence records
+- Company-scoped dashboard and section routes
+- Structural founder ownership input
+- Strict score, recovery path, risks, Q&A, action plan, and Markdown report
+- Six-component confidence audit
+- Unknown-evidence and human-review states
+- Isolated temporary test database
+- Safe demo reset using `is_demo`
+- Release-candidate screenshots and documentation
 
-## Near term
+## Next
 
-- SQLite FTS5 or TF-IDF evidence ranking
-- More flexible CSV column mapping
-- Document freshness and version tracking
-- Editable action status and owner workflows
-- Readiness-score history and change explanations
-- PDF and DOCX variants of the Markdown diligence report
-
-## Optional local intelligence
-
-- Ollama integration for grounded answer rewriting
-- Local document summarization
-- Investor-question clustering
-- Citation validation against source snippets
-
-## Workflow expansion
-
-- Data-room sharing permissions
-- Investor-specific diligence packs
-- Founder and investor CRM integration
-- Scenario planning and burn reduction modeling
-- Fundraise timeline prediction
-- Board update generator
-- Cap-table dilution simulator
-- Customer contract metadata extraction
+- Dedicated unknown-document triage and reclassification
+- Action-item status, owner, and review editing
+- Question-level and risk-level reviewer attribution
+- Readiness-score history and score-change explanations
+- Flexible CSV/Excel column mapping
+- SQLite FTS5 or TF-IDF evidence retrieval
+- PDF and DOCX report exports
+- One small browser smoke suite and real ESLint configuration
 
 ## Production hardening
 
-- PostgreSQL and background jobs
-- Organization-level access controls
-- Encryption and audit logs
-- Configurable scoring policies by stage
-- Adviser review workflows
-- Automated regression fixtures for document extraction
+- PostgreSQL and managed migrations
+- Authentication, organizations, and role-based access
+- Encryption, audit logs, retention, and document versioning
+- Background extraction jobs and OCR
+- Configurable stage- and industry-specific policies
+- Adviser and specialist review workflows

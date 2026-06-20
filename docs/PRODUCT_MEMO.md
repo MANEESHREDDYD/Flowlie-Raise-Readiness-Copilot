@@ -1,55 +1,33 @@
-# Product memo
+# Product Memo
 
-## Product
+## Feature
 
-**F Raise Readiness Copilot**
+**Diligence Readiness Layer**
 
-## Target user
+An independent feature-layer prototype for operator-reviewed fundraising diligence preparation.
 
-Seed-stage founders, startup finance/operations leads, and fundraising advisers preparing a company for investor diligence.
+## User and problem
 
-## Problem
+Startup operators and fundraising advisers assemble evidence across financial models, ownership records, people files, customer data, compliance checklists, and meeting notes. Gaps often surface only after investor follow-up.
 
-Fundraise readiness is not one checklist. It is a cross-functional state spread across cash planning, legal evidence, ownership records, people operations, customer proof, and the questions raised in investor conversations. Founders often discover gaps only after an investor asks, which creates delay and weakens confidence.
+## Workflow
 
-## Solution
-
-F ingests the company’s existing operating evidence, calculates a transparent readiness score, identifies likely diligence concerns, drafts source-backed answers, and turns missing evidence into a seven-day plan.
-
-## Why now
-
-Founders are expected to run leaner companies while presenting more complete evidence. At the same time, modern document extraction and local analysis make it possible to deliver useful copilot behavior without expensive model calls or invasive integrations.
-
-## Workflow fit
-
-The Copilot sits before and during a fundraise:
-
-1. Founder assembles core records.
-2. F assesses completeness and pressure points.
-3. The team resolves the highest-severity gaps.
-4. Investor questions become reusable, source-backed answers.
-5. New meeting notes update the preparation queue.
-
-## MVP scope
-
-- Synthetic AtlasAI demo
-- Local document and structured-data ingestion
-- Deterministic readiness scoring
-- Data-room completeness
-- Financial trend analysis
-- Risk generation
-- Investor Q&A templates with source evidence
-- Seven-day action planning
-- Founder-friendly dashboard
+1. Create or select a company.
+2. Add structured records and documents.
+3. Run deterministic analysis.
+4. Review the strict score, confidence coverage, and evidence-backed risks.
+5. Resolve the cleanup queue.
+6. Export a Markdown preparation report.
 
 ## Product principles
 
-- Show the evidence behind every conclusion.
-- Say “needs review,” not “legally compliant.”
-- Prefer deterministic calculations for important facts.
-- Make missing evidence visible.
-- Turn analysis into owned work.
+- Preserve the current evidence-backed score.
+- Cite the source behind each generated preparation note.
+- Treat unknown evidence as unknown.
+- Require human review before external use.
+- Keep important calculations deterministic.
+- Separate score-changing evidence from preparedness-only work.
 
-## Future opportunities
+## Boundaries
 
-Optional local language models can improve prose while rules retain factual control. Longer-term opportunities include investor-specific packs, CRM context, board updates, scenario planning, and fundraise timeline forecasting.
+The prototype is not a standalone company, an autonomous adviser, or an endorsed product extension. It does not provide legal, tax, accounting, investment, fundraising, privacy, security, or compliance advice.

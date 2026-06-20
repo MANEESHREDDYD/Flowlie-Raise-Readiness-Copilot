@@ -1,3 +1,17 @@
 # Change Log
 
-- 2026-06-20: Implemented V1.4 Trust, Stress Testing, and Confidence Audit Layer to prove engineering maturity by exposing system uncertainty via a Confidence Audit UI and robust stress tests. Verified this didn't break existing readiness calculation endpoints or UI functionality. Limitation: "Unknown" documents are still lumped together rather than giving operators a dedicated triage/re-classification queue.
+## 0.4.0 release candidate — 2026-06-20
+
+- Added company-scoped operational routes and context-aware sidebar navigation.
+- Added structural founder input to cap-table forms.
+- Isolated backend tests from the developer SQLite database.
+- Made demo reset delete only explicitly marked demo companies.
+- Persisted founder-facing risk notes.
+- Expanded confidence audit coverage to Pipeline and Meeting Follow-up.
+- Updated public positioning, documentation, versions, and release screenshots.
+
+## Earlier prototype milestones
+
+- Added multi-company demo data and user-entered SQLite persistence.
+- Added strict score tiers, recovery projections, investor relevance, and Markdown report export.
+- Added human-review states, unknown-document handling, and adversarial stress fixtures.

@@ -1,12 +1,14 @@
 import { notFound } from "next/navigation";
-import { Sidebar } from "@/components/Sidebar";
+import { AppLayout } from "@/components/Layout";
+import { API_URL } from "@/lib/api";
+import { ConfidenceAudit } from "@/lib/types";
 
 async function getConfidenceAudit(id: string) {
-  const res = await fetch(`http://127.0.0.1:8000/companies/${id}/confidence-audit`, {
+  const res = await fetch(`${API_URL}/companies/${id}/confidence-audit`, {
     cache: "no-store",
   });
   if (!res.ok) return null;
-  return res.json();
+  return res.json() as Promise<ConfidenceAudit>;
 }
 
 export default async function ConfidenceAuditPage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,9 +24,8 @@ export default async function ConfidenceAuditPage({ params }: { params: Promise<
   };
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 p-10 overflow-y-auto bg-[#000]">
+    <AppLayout>
+      <main>
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-semibold tracking-tight text-white">Confidence Audit</h1>
@@ -56,7 +57,7 @@ export default async function ConfidenceAuditPage({ params }: { params: Promise<
           <div className="space-y-4 pt-4">
             <h2 className="text-xl font-semibold tracking-tight text-white">Component Breakdown</h2>
             <div className="grid gap-4">
-              {audit.components.map((comp: any) => (
+              {audit.components.map((comp) => (
                 <div key={comp.component} className="card p-6 flex flex-col gap-5 hover:bg-[#111] transition-colors">
                   <div className="flex justify-between items-start">
                     <div>
@@ -72,7 +73,7 @@ export default async function ConfidenceAuditPage({ params }: { params: Promise<
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-6 text-[13px] text-[#666] font-medium border-t border-borderDark pt-4 mt-1">
                     <div className="flex items-center gap-2">
                       Coverage: <span className="font-semibold text-[#dedede]">{Math.round(comp.evidence_coverage * 100)}%</span>
@@ -99,6 +100,6 @@ export default async function ConfidenceAuditPage({ params }: { params: Promise<
           </div>
         </div>
       </main>
-    </div>
+    </AppLayout>
   );
 }

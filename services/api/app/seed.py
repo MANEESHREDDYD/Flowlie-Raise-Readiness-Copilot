@@ -15,7 +15,6 @@ from .engines.risk_engine import generate_risks
 
 DEMO_ROOT = Path(__file__).resolve().parents[3] / "demo-data"
 DEMO_SLUGS = ["atlasai", "finpilot", "healthsync", "devtoolshub", "greenledger"]
-DEMO_NAMES = ["AtlasAI", "FinPilot", "HealthSync", "DevToolsHub", "GreenLedger"]
 STRUCTURED_FILES = {
     "financials.csv": "financials",
     "cap_table.csv": "cap_table",
@@ -62,9 +61,7 @@ def _delete_company_data(db: Session, company_ids: list[int]):
 
 def reset_demo(db: Session):
     ids = list(db.scalars(
-        select(models.Company.id).where(
-            (models.Company.is_demo.is_(True)) | (models.Company.name.in_(DEMO_NAMES))
-        )
+        select(models.Company.id).where(models.Company.is_demo.is_(True))
     ).all())
     _delete_company_data(db, ids)
     db.commit()

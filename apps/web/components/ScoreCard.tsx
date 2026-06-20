@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 
 export function ScoreCard({ score, tier }: { score: number; tier: string }) {
   const color = score >= 75 ? "#fff" : score >= 55 ? "#a3a3a3" : "#555";
-  return <motion.div 
-    whileHover={{ y: -2 }} 
+  return <motion.div
+    whileHover={{ y: -2 }}
     transition={{ type: "spring", stiffness: 400, damping: 30 }}
     className="card flex min-h-64 flex-col justify-between p-6 hover:bg-[#111]"
   >

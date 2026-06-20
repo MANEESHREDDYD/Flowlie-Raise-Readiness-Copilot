@@ -1,1 +1,1 @@
-"""F Raise Readiness Copilot API."""
+"""Diligence Readiness Layer API."""

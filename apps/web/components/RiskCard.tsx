@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Risk } from "@/lib/types";
+import { api } from "@/lib/api";
 import { SeverityBadge } from "./Badges";
 import { motion } from "framer-motion";
 
@@ -10,16 +11,15 @@ export function RiskCard({ risk, compact = false }: { risk: Risk; compact?: bool
   const handleSave = async () => {
     if (note === risk.operator_note) return;
     setSaving(true);
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/risks/${risk.id}`, {
+    await api<Risk>(`/risks/${risk.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ operator_note: note })
     });
     setSaving(false);
   };
 
-  return <motion.article 
-    whileHover={{ x: 2 }} 
+  return <motion.article
+    whileHover={{ x: 2 }}
     transition={{ type: "spring", stiffness: 400, damping: 30 }}
     className="card p-5 border-l-[3px] hover:bg-[#111]"
     style={{ borderLeftColor: risk.severity === 'high' ? '#f43f5e' : risk.severity === 'medium' ? '#f59e0b' : '#3b82f6' }}
@@ -37,12 +37,12 @@ export function RiskCard({ risk, compact = false }: { risk: Risk; compact?: bool
       <div className="mt-5">
         <p className="text-[12px] font-medium text-white mb-2">Operator Note {saving && <span className="text-[#666] font-normal">(Saving...)</span>}</p>
         <textarea 
-          className="w-full rounded-lg border border-borderDark bg-[#050505] p-3 text-sm text-white placeholder-[#555] focus:border-white/40 focus:outline-none transition-colors" 
-          rows={2} 
-          placeholder="Add operator notes here..." 
-          value={note} 
-          onChange={e => setNote(e.target.value)} 
-          onBlur={handleSave} 
+          className="w-full rounded-lg border border-borderDark bg-[#050505] p-3 text-sm text-white placeholder-[#555] focus:border-white/40 focus:outline-none transition-colors"
+          rows={2}
+          placeholder="Add operator notes here..."
+          value={note}
+          onChange={e => setNote(e.target.value)}
+          onBlur={handleSave}
         />
       </div>
     </div>}
