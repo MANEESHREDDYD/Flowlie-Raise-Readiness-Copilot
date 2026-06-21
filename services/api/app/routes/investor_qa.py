@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from .. import models
 from ..database import get_db
-from ..engines.qa_engine import generate_questions
+from ..engines.qa_engine import get_default_question_generator
 from ..engines.search_engine import search_documents
 from .helpers import company_data, company_or_404
 
@@ -18,7 +18,7 @@ def generate(company_id: int, db: Session = Depends(get_db)):
     db.execute(delete(models.InvestorQuestion).where(models.InvestorQuestion.company_id == company_id))
     rows = [
         models.InvestorQuestion(company_id=company_id, **item)
-        for item in generate_questions(company, data["metrics"], data["cap_table"], data["headcount"], data["pipeline"], data["compliance"], data["documents"])
+        for item in get_default_question_generator().generate(company, data["metrics"], data["cap_table"], data["headcount"], data["pipeline"], data["compliance"], data["documents"])
     ]
     db.add_all(rows)
     db.commit()

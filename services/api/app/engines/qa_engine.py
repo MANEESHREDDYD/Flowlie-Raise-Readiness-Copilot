@@ -1,3 +1,5 @@
+from typing import Protocol
+
 from .financial_engine import financial_summary
 
 
@@ -13,7 +15,7 @@ def _source(documents, doc_types, fallback):
     return ", ".join(names) if names else fallback
 
 
-def generate_questions(company, metrics, cap_table, headcount, pipeline, compliance, documents=None) -> list[dict]:
+def _rule_based_questions(company, metrics, cap_table, headcount, pipeline, compliance, documents=None) -> list[dict]:
     documents = documents or []
     questions = []
     if metrics:
@@ -130,3 +132,38 @@ def generate_questions(company, metrics, cap_table, headcount, pipeline, complia
         ),
     ])
     return questions
+
+
+class QuestionGenerator(Protocol):
+    """Swappable investor-Q&A interface.
+
+    Routes/engines depend on this, not on a concrete class. A future LLM-backed
+    implementation can be substituted (see docs/EXTENSION_POINTS.md) only if it keeps
+    the same guarantees the rule-based version provides and the tests pin: every item
+    must carry a real ``source`` (never a fabricated citation), an explicit
+    ``missing_evidence`` field, and a ``confidence`` value.
+    """
+
+    def generate(self, company, metrics, cap_table, headcount, pipeline, compliance, documents=None) -> list[dict]: ...
+
+
+class RuleBasedQuestionGenerator:
+    """Deterministic template Q&A generator — the only implementation today. Behavior is
+    identical to the historical ``generate_questions`` function."""
+
+    def generate(self, company, metrics, cap_table, headcount, pipeline, compliance, documents=None) -> list[dict]:
+        return _rule_based_questions(company, metrics, cap_table, headcount, pipeline, compliance, documents)
+
+
+_default_question_generator: QuestionGenerator = RuleBasedQuestionGenerator()
+
+
+def get_default_question_generator() -> QuestionGenerator:
+    """Factory for the wired-in Q&A generator. Swap the return value here (or inject a
+    generator explicitly at the call site) to change implementations system-wide."""
+    return _default_question_generator
+
+
+def generate_questions(company, metrics, cap_table, headcount, pipeline, compliance, documents=None) -> list[dict]:
+    """Backwards-compatible convenience wrapper that delegates to the default generator."""
+    return get_default_question_generator().generate(company, metrics, cap_table, headcount, pipeline, compliance, documents)

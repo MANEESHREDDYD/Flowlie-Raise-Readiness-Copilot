@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 
 from . import models
 from .engines.action_plan_engine import generate_action_plan
-from .engines.document_classifier import classify_document
-from .engines.qa_engine import generate_questions
+from .engines.document_classifier import get_default_classifier
+from .engines.qa_engine import get_default_question_generator
 from .engines.readiness_engine import calculate_readiness, readiness_tier
 from .engines.risk_engine import generate_risks
 
@@ -91,7 +91,7 @@ def seed_company(db: Session, slug: str) -> models.Company:
         text = path.read_text(encoding="utf-8")
         doc_type = STRUCTURED_FILES.get(path.name) or TEXT_TYPES.get(path.name)
         if not doc_type:
-            doc_type = classify_document(text, path.name)["document_type"]
+            doc_type = get_default_classifier().classify(text, path.name)["document_type"]
         db.add(models.Document(
             company_id=company.id, file_name=f"{slug}/{path.name}", document_type=doc_type,
             category=CATEGORIES.get(doc_type, "Other"), status="present", extracted_text=text,
@@ -151,7 +151,7 @@ def run_seed_analysis(db: Session, company: models.Company, score_override: floa
     db.add_all(risks)
     questions = [
         models.InvestorQuestion(company_id=company.id, **item)
-        for item in generate_questions(company, data["metrics"], data["cap_table"], data["headcount"], data["pipeline"], data["compliance"], data["documents"])
+        for item in get_default_question_generator().generate(company, data["metrics"], data["cap_table"], data["headcount"], data["pipeline"], data["compliance"], data["documents"])
     ]
     db.add_all(questions)
     result = calculate_readiness(company, **data, generated_questions_count=len(questions))

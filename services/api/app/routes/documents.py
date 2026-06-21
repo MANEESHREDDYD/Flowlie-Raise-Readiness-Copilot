@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import get_db
 from ..engines.data_room_engine import build_data_room
-from ..engines.document_classifier import classify_document
+from ..engines.document_classifier import get_default_classifier
 from ..engines.ingestion_engine import ingest_upload
 from .helpers import company_data, company_or_404
 
@@ -32,7 +32,7 @@ async def upload_document(company_id: int, file: UploadFile = File(...), db: Ses
 @router.post("/companies/{company_id}/documents/text", response_model=schemas.DocumentOut)
 def create_text_document(company_id: int, payload: schemas.DocumentTextCreate, db: Session = Depends(get_db)):
     company_or_404(db, company_id)
-    classification = classify_document(payload.text, payload.title)
+    classification = get_default_classifier().classify(payload.text, payload.title)
     file_name = payload.title if "." in payload.title else f"{payload.title}.txt"
     document = models.Document(
         company_id=company_id,
@@ -59,7 +59,7 @@ def update_document(document_id: int, payload: schemas.DocumentUpdate, db: Sessi
     for field, value in values.items():
         setattr(document, field, value)
     if "extracted_text" in values and "document_type" not in values:
-        result = classify_document(document.extracted_text, document.file_name)
+        result = get_default_classifier().classify(document.extracted_text, document.file_name)
         document.document_type, document.category = result["document_type"], result["category"]
         document.review_status = result.get("review_status", "draft")
         document.evidence_quality = result.get("evidence_quality", "strong")
@@ -90,7 +90,7 @@ def analyze_documents(company_id: int, db: Session = Depends(get_db)):
     docs = list(db.scalars(select(models.Document).where(models.Document.company_id == company_id)).all())
     results = []
     for doc in docs:
-        result = classify_document(doc.extracted_text, doc.file_name)
+        result = get_default_classifier().classify(doc.extracted_text, doc.file_name)
         if doc.document_type == "unknown":
             doc.document_type, doc.category = result["document_type"], result["category"]
         results.append({"document_id": doc.id, "file_name": doc.file_name, **result})
