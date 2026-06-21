@@ -1,5 +1,6 @@
 import { Sidebar } from "./Sidebar";
+import { ApiHealthBanner } from "./ApiHealthBanner";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
-  return <div><Sidebar/><main className="min-h-screen px-5 py-7 lg:ml-64 lg:px-10 lg:py-10">{children}</main></div>;
+  return <div><Sidebar/><main className="min-h-screen px-5 py-7 lg:ml-64 lg:px-10 lg:py-10"><ApiHealthBanner/>{children}</main></div>;
 }

@@ -52,15 +52,31 @@ For more context, see [LIMITATIONS.md](docs/LIMITATIONS.md) and [ENGINEERING_LES
 
 ## Product preview
 
-Run the app locally, open `http://localhost:3000/demo`, and select Seed & analyze AtlasAI. The dashboard will populate in one workflow.
+Run the app locally, open `http://localhost:3000/demo`, and select **Seed all companies**.
+
+### Multi-company portfolio
+
+![Company portfolio](docs/screenshots/company-portfolio.png)
 
 ### Strict score and recovery path
 
+![AtlasAI dashboard](docs/screenshots/dashboard.png)
+
 ### Investor-facing risk context
+
+![Risk review](docs/screenshots/risks.png)
 
 ### Source-backed diligence Q&A
 
+![Investor Q&A](docs/screenshots/investor-qa.png)
+
 ### Confidence Audit
+
+![Confidence audit](docs/screenshots/confidence-audit.png)
+
+### Persistent company data entry
+
+![Cap-table data editor](docs/screenshots/edit-data.png)
 
 ## Architecture
 
@@ -97,7 +113,25 @@ docs/                     Architecture, product memo, roadmap, demo script
 
 ## Local setup
 
-### 1. Backend
+### Fastest setup
+
+From the repository root:
+
+```powershell
+npm run setup
+npm run dev
+```
+
+`npm run dev` starts FastAPI and Next.js together, waits for the API health check, and shuts down the backend when the frontend process ends.
+
+Open:
+
+- App: `http://localhost:3000/demo`
+- API docs: `http://127.0.0.1:8000/docs`
+
+The browser uses the same-origin `/api` proxy, so local hostname and LAN-origin differences do not break demo actions.
+
+### Manual backend startup
 
 Windows PowerShell:
 
@@ -121,7 +155,7 @@ uvicorn app.main:app --reload --port 8000
 
 API docs: `http://localhost:8000/docs`
 
-### 2. Frontend
+### Manual frontend startup
 
 In a second terminal:
 
@@ -135,8 +169,9 @@ Open `http://localhost:3000`.
 
 To point the UI at a different API:
 
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
+```powershell
+$env:API_INTERNAL_URL="http://127.0.0.1:8000"
+npm run dev
 ```
 
 ### 3. Run the demo via API
@@ -153,6 +188,12 @@ The `/demo` UI performs the same sequence with one button.
 
 ## Tests
 
+Run the complete verification suite from the repository root:
+
+```powershell
+npm run verify
+```
+
 Backend:
 
 ```powershell
@@ -166,6 +207,38 @@ Frontend:
 cd apps/web
 npm run typecheck
 npm run build
+```
+
+## Troubleshooting
+
+### “Failed to fetch” or “Backend API is offline”
+
+This means Next.js is running without FastAPI. Stop any frontend-only process using port 3000, then run:
+
+```powershell
+npm run dev
+```
+
+The Demo page now shows an explicit offline state and a retry button instead of treating a disconnected API as an empty database.
+
+With the stack running, exercise the complete browser workflow:
+
+```powershell
+npm run smoke
+```
+
+This resets demo rows, seeds all five companies through the UI, opens the portfolio, and confirms AtlasAI and FinPilot show distinct scores.
+
+To check the API directly:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:8000/health
+```
+
+Expected response:
+
+```json
+{"status":"ok"}
 ```
 
 ## Demo data
