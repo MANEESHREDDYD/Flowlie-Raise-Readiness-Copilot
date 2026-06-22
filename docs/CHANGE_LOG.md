@@ -1,3 +1,7 @@
 # Change Log
 
 - 2026-06-20: Implemented V1.4 Trust, Stress Testing, and Confidence Audit Layer to prove engineering maturity by exposing system uncertainty via a Confidence Audit UI and robust stress tests. Verified this didn't break existing readiness calculation endpoints or UI functionality. Limitation: "Unknown" documents are still lumped together rather than giving operators a dedicated triage/re-classification queue.
+
+- 2026-06-20: Merged frontend-brutalist-redesign. Updated the UI to a brutalist aesthetic using framer-motion and changed branding. Verified build and layout rendering. Limitation: This change inadvertently overwrote critical confidence audit caveats, requiring a subsequent rollback to restore Flowlie alignment.
+- 2026-06-22: Merged fix-credibility-gaps. Restored Flowlie alignment, corrected false LLM claims, and added client-side CSV bulk-import functionality for structured data. Verified deterministic logic remained intact. Limitation: The new CSV bulk-import lacks server-side column mapping for truly arbitrary headers.
+- 2026-06-22: Merged dx-tooling-setup. Hardened API security with strict CORS rules (loopback/RFC-1918) and added a streamlined one-command dev setup script. Verified local environment initialization and API health. Limitation: The setup script is tailored exclusively for local Windows development and not suitable for production deployment.

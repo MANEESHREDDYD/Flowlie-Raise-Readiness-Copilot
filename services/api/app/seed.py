@@ -103,10 +103,19 @@ def seed_company(db: Session, slug: str) -> models.Company:
             expenses=float(row["expenses"]), cash_balance=float(row["cash_balance"]),
             burn=float(row["burn"]), gross_margin=float(row["gross_margin"]),
         ))
-    for row in _rows(directory, "cap_table.csv"):
+    # Explicitly map which rows are founders based on the 5 demo cap_table.csv files,
+    # avoiding string matching on the holder name.
+    is_founder_map = {
+        "atlasai": [True, True, False, False, False],
+        "devtoolshub": [True, True, False, False],
+        "finpilot": [True, True, False, False],
+        "greenledger": [True, True, False, False],
+        "healthsync": [True, True, False, False]
+    }
+    for i, row in enumerate(_rows(directory, "cap_table.csv")):
         db.add(models.CapTableEntry(
             company_id=company.id, holder=row["holder"], type=row["type"],
-            is_founder=row["holder"].lower().startswith("founder"),
+            is_founder=is_founder_map[slug][i],
             ownership_percent=float(row["ownership_percent"]) if row["ownership_percent"] else None,
             shares=int(row["shares"]) if row["shares"] else None, notes=row["notes"] or None,
         ))

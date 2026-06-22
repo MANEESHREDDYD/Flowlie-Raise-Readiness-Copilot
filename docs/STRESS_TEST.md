@@ -26,7 +26,7 @@ The document classifier effectively caught ambiguous and non-standard documents.
 Messy cap table and SAFE notes uploaded as unstructured text *do not* automatically resolve related missing data or risk flags. For instance, a text document describing a SAFE does not magically fix the "Unmodeled SAFE" cap table risk. The operator must review the document and manually enter the structural cap table data.
 
 ## Known failure modes
-* **No CSV bulk-import path exists:** There is no pipeline for uploading messy CSVs and automatically mapping columns. Real-world messy CSVs are a known, named gap, and currently require manual mapping or one-by-one JSON ingestion via the API.
+* **Client-side CSV bulk-import exists for all record types:** Bulk import is implemented for financials, cap-table, headcount, customer-pipeline, and compliance in `csv.ts` and `edit-data/page.tsx`, with column-alias mapping, per-row validation, and no silent drops. The remaining gap is server-side column mapping for truly arbitrary headers — the client alias map covers common real-world variants but not all possible column names.
 * **No OCR:** The system cannot extract text from scanned PDFs.
 
 ## What changed after the stress test
