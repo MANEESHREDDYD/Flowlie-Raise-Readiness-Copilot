@@ -6,8 +6,10 @@ In the seed data for `AtlasAI`, the strict readiness score evaluates to exactly 
 ## Why Generated Outputs Default to Needs Review
 Every piece of ingested data that lacks structural certainty, and every generated artifact (action items, Q&A), starts with a `needs_review` status. In a high-stakes fundraising preparation context, automated systems cannot unilaterally declare a cap table accurate or a legal document completely resolved. The system acts as a draft engine to surface gaps; an operator must always provide the final sign-off.
 
-## Deterministic Rules Before LLMs
-We chose a strictly deterministic approach for scoring, missing inputs, and baseline classifications. We did this because fundraising metrics (e.g. runway months, founder ownership percentages) require exact logic, not probabilistic inference. LLMs are only applied at the very edges of the system (e.g. drafting context-aware questions from transcripts) where deterministic rules fail to capture nuance.
+## Deterministic Rules, No LLM
+The current system has **zero LLM dependency anywhere** — there is no OpenAI, Anthropic, LangChain, Ollama, or any other model SDK in `requirements.txt` or `package.json`, and no inference call in the codebase. Every output is produced by deterministic logic: explicit scoring rules, keyword document classification, and string-template generation. In particular, `qa_engine.py` builds investor questions and suggested answers from deterministic templates populated with calculated facts and named source filenames — it does not call a language model.
+
+We chose this because fundraising metrics (e.g. runway months, founder ownership percentages) require exact logic, not probabilistic inference, and because deterministic outputs are testable and auditable. If an LLM were ever added in the future, it would be confined to grounded rewrite/extraction assistance (e.g. smoothing already-computed answer prose, or extracting fields from raw documents), and the deterministic rule results would remain the source of truth. That is a possible future direction, not a current capability.
 
 ## Where Deterministic Rules Break
 Deterministic rules have clear boundaries:

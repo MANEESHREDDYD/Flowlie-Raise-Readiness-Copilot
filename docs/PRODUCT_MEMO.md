@@ -6,7 +6,7 @@
 
 ## Target user
 
-Seed-stage founders, startup finance/operations leads, and fundraising advisers preparing a company for investor diligence.
+An embedded back-office or fundraising **operator** preparing a company's evidence for investor diligence. The founder is the **subject** of the evidence and the beneficiary of the preparation — not a direct user of the system. Founders do not log in or self-serve; an operator reviews founder-provided evidence and produces drafts on their behalf.
 
 ## Problem
 
@@ -24,11 +24,11 @@ Founders are expected to run leaner companies while presenting more complete evi
 
 The Copilot sits before and during a fundraise:
 
-1. Founder assembles core records.
+1. The operator intakes the founder-provided records.
 2. Flowlie assesses completeness and pressure points.
-3. The team resolves the highest-severity gaps.
-4. Investor questions become reusable, source-backed answers.
-5. New meeting notes update the preparation queue.
+3. The operator resolves the highest-severity gaps.
+4. Investor questions become reusable, source-backed answer drafts.
+5. New meeting notes update the operator's preparation queue.
 
 ## MVP scope
 
@@ -40,7 +40,7 @@ The Copilot sits before and during a fundraise:
 - Risk generation
 - Investor Q&A templates with source evidence
 - Seven-day action planning
-- Founder-friendly dashboard
+- Operator dashboard
 
 ## Product principles
 
