@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Risk } from "@/lib/types";
+import { api } from "@/lib/api";
 import { SeverityBadge } from "./Badges";
 import { motion } from "framer-motion";
 
@@ -10,9 +11,8 @@ export function RiskCard({ risk, compact = false }: { risk: Risk; compact?: bool
   const handleSave = async () => {
     if (note === risk.operator_note) return;
     setSaving(true);
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/risks/${risk.id}`, {
+    await api<Risk>(`/risks/${risk.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ operator_note: note })
     });
     setSaving(false);

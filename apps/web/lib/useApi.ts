@@ -14,6 +14,7 @@ export function useApi<T>(path: string, enabled = true) {
       setData(await api<T>(path));
       setError(null);
     } catch (err) {
+      setData(null);
       setError(err instanceof Error ? err.message : "Unable to load data");
     } finally {
       setLoading(false);

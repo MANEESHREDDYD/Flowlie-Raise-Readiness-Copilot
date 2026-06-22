@@ -17,7 +17,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(
     title="Flowlie Raise Readiness Copilot API",
     description="Local-first, deterministic fundraising diligence intelligence for synthetic startup data.",
-    version="0.1.0",
+    version="0.4.0",
     lifespan=lifespan,
 )
 app.add_middleware(
@@ -28,6 +28,8 @@ app.add_middleware(
         "http://localhost:3001",
         "http://127.0.0.1:3001",
     ],
+    # Loopback + RFC-1918 private ranges only (never public IPs), since allow_credentials is on.
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1|10(\.\d{1,3}){3}|172\.(1[6-9]|2\d|3[01])(\.\d{1,3}){2}|192\.168(\.\d{1,3}){2})(:\d+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
